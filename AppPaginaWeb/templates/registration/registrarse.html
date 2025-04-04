@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Usuario</title>
+
+    <!-- Incorporación de estilos en Django -->
+    <link rel="stylesheet" href="{% static 'css/styles_nuevo_usuario.css' %}">
+</head>
+
+<body>
+    <section class="register-container">
+        <div class="register-box">
+            <h2>Regístrate</h2>
+
+            <form id="register-form" method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" name="name" placeholder="Ingresa tu nombre" required>
+                </div>
+                <div class="input-group">
+                    <label for="username">Nombre de Usuario (Unico)</label>
+                    <input type="text" id="username" name="username" placeholder="Ingresa tu nombre de usuario"
+                        required>
+                </div>
+                <div id="error-message" style="color: red; margin-top: 10px;"></div>
+                <div class="input-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="confirm-password" name="confirm_password"
+                        placeholder="Confirma tu contraseña" required>
+                </div>
+                <div class="input-group">
+                    <label for="account-type">Tipo de Cuenta</label>
+                    <select id="account-type" name="account_type" required>
+                        <option value="" disabled selected>Selecciona una opción</option>
+                        <option value="usuario">Usuario</option>
+                        <option value="negocio">Negocio</option>
+                    </select>
+                </div>
+                <button type="submit">Registrarse</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Función que maneja el envío del formulario
+        async function registrarUsuario(event) {
+            event.preventDefault();  // Evitar el envío tradicional del formulario
+
+            // Recoger los datos del formulario
+            const nombre = document.getElementById('name').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const accountType = document.getElementById('account-type').value;
+
+            // Validar que las contraseñas coincidan
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden.");
+                return;
+            }
+
+            // Preparar los datos a enviar
+            const datos = {
+                nombre_usuario: username,  // Este campo puede ajustarse según tu lógica
+                nombre: nombre,
+                password: password,
+            };
+
+            // Dependiendo del tipo de cuenta, enviar la solicitud al endpoint correspondiente
+            try {
+                let response;
+
+                if (accountType === 'negocio') {
+                    // Enviar los datos a la API para registrar un negocio
+                    response = await fetch('/negocios/crear/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  // Incluir CSRF token
+                        },
+                        body: JSON.stringify(datos)  // Enviar los datos como JSON
+                    });
+                } else if (accountType === 'usuario') {
+                    // Enviar los datos a la API para registrar un usuario
+                    response = await fetch('/usuarios/crear/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  // Incluir CSRF token
+                        },
+                        body: JSON.stringify(datos)  // Enviar los datos como JSON
+                    });
+                }
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Usuario registrado exitosamente");
+                    document.getElementById('error-message').textContent = "";
+                    // Si el tipo de cuenta es 'negocio', redirigir a la página de inicio de negocio
+                    if (accountType === 'negocio') {
+                        localStorage.setItem("usuario", JSON.stringify(data));
+                        console.log("Usuario registrado:", data);
+                        // Guardar datos en localStorage (o sessionStorage)
+                        window.location.href = "{% url 'main_negocio' %}";
+                    } else {
+                        // Redirigir o limpiar el formulario si es necesario
+                        document.getElementById('register-form').reset();
+                    }
+                } else {
+                    document.getElementById('error-message').textContent = data.error || "Error al registrar el usuario.";
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Hubo un problema al registrar el usuario.");
+            }
+        }
+
+        // Llamar a la función cuando se envíe el formulario
+        document.getElementById('register-form').addEventListener('submit', registrarUsuario);
+
+    </script>
+</body>
+
+</html>

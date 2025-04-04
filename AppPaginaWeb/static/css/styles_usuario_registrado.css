@@ -1,0 +1,148 @@
+/* Estilos generales */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #3498db, rgba(41, 127, 185, 0.512));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.login-box h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.input-group {
+    margin-bottom: 22px;
+    text-align: left;
+    width: 100%;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%; /* Asegura que los inputs y selects tomen todo el ancho */
+    padding: 12px; /* Se ajusta el padding para que coincida con el botón */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* Evita que se desborde */
+    appearance: none; /* Oculta el estilo nativo del select */
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.input-group select {
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #3498dbd1, #2575fc);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .register-box {
+        padding: 20px;
+    }
+
+    .register-box h2 {
+        font-size: 1.5em;
+    }
+
+    .input-group input {
+        padding: 12px;
+    }
+
+    .input-group select {
+        padding: 12px; /* Mismo padding en pantallas pequeñas */
+    }
+
+    button {
+        padding: 12px;
+    }
+}
+
+/* Personalización del select con una flecha personalizada */
+.input-group select {
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    padding-right: 40px; /* Deja espacio para la flecha */
+    position: relative;
+}
+
+/* Añadir la flecha personalizada */
+.input-group select::after {
+    content: '';
+    position: absolute;
+    right: 12px;  /* Ubicación de la flecha */
+    top: 50%;
+    transform: translateY(-50%);
+    border: solid #333;
+    border-width: 0 2px 2px 0;
+    padding: 5px;
+    transform: rotate(45deg);
+}
+
+/* Elimina la flecha en navegadores que soportan appearance: none */
+.input-group select::-ms-expand {
+    display: none; /* Oculta la flecha en IE/Edge */
+}
+
+/* Efecto al pasar el mouse */
+.input-group select:hover {
+    border-color: #2575fc;
+}
+
+.input-group select:focus {
+    border-color: #3498db;
+    outline: none;
+}

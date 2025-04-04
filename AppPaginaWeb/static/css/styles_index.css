@@ -1,0 +1,152 @@
+/* Reset de márgenes y rellenos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-image: url('/Img/F6.jpg'); /* Imagen de fondo */
+    background-size: cover; /* Cubre todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que se repita */
+    background-attachment: fixed; /* Fija la imagen */
+    color: #333;
+    background-color: rgb(216, 212, 212);
+}
+
+/* Estilos para el Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+}
+
+header .logo h1 {
+    font-size: 2.5em;  /* Tamaño mayor para mejor visibilidad */
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #3498db;
+}
+
+nav ul li a.login {
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a.login:hover {
+    background-color: #2980b9;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 80px 20px;  /* Reducido para dar un poco más de espacio */
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+    max-width: 900px;  /* Aumentado el max-width */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: absolute; /* Asegura que el contenedor se pueda centrar */
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Ajusta la posición para centrar completamente */
+    width: 90%; /* Para que se adapte bien a diferentes pantallas */
+}
+
+.hero h2 {
+    font-size: 2.8em;  /* Tamaño ajustado */
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 1.4em;  /* Aumentado el tamaño para mejor legibilidad */
+    margin-bottom: 40px;
+    color: #666;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Ampliado el espacio entre los botones */
+}
+
+.btn {
+    padding: 14px 28px;  /* Botones más grandes */
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background-color: rgba(41, 127, 185, 0.512);
+    transform: translateY(-2px);
+}
+
+/* Diseño responsive para pantallas más pequeñas */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero {
+        padding: 50px 20px;
+        margin-top: 30px; /* Separación ajustada */
+    }
+
+    .hero h2 {
+        font-size: 2.2em; /* Ajustado tamaño para pantallas pequeñas */
+    }
+
+    .hero p {
+        font-size: 1.1em;  /* Ajuste de tamaño */
+    }
+
+    .buttons {
+        flex-direction: column; /* Botones apilados verticalmente */
+        gap: 15px; /* Reducido espacio entre botones */
+    }
+
+    .btn {
+        padding: 10px 20px;  /* Tamaño reducido para pantallas pequeñas */
+    }
+}

@@ -1,0 +1,154 @@
+/* Estilos generales */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg,  #3498db, rgba(41, 127, 185, 0.512));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+}
+
+.register-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.register-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+
+}
+
+.register-box h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.input-group {
+    margin-bottom: 22px;
+    text-align: left;
+    width: 100%;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%; /* Asegura que el input tome todo el ancho */
+    padding: 12px; /* Se ajusta el padding para que coincida con el botón */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* Evita que se desborde */
+}
+
+.input-group input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px; /* Mismo padding que los inputs */
+    background: linear-gradient(135deg, #3498dbd1, #2575fc);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .register-box {
+        padding: 20px;
+    }
+
+    .register-box h2 {
+        font-size: 1.5em;
+    }
+
+    .input-group input {      
+        padding: 12px; /* Mismo padding en pantallas pequeñas */
+    }
+
+    button {
+        padding: 12px;
+    }
+}
+
+.google-btn i {
+    font-size: 1.2em;
+    color: #EA4335;  
+}
+
+.google-btn:hover {
+    background: rgba(255, 165, 0, 0.1); /* Fondo naranja suave */
+    transform: scale(1.03);
+}
+
+/* Asegurar que el margen sea igual para todos los elementos */
+.input-group,
+.google-btn,
+button {
+    margin-bottom: 15px; /* Espaciado uniforme */
+}
+
+.input-group select {
+    width: 100%; /* Ocupa todo el ancho como los inputs */
+    padding: 12px; /* Mismo padding que los inputs */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 500;
+    background: white;
+    color: #333;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* Evita que se desborde */
+    appearance: none; /* Oculta el estilo nativo del select */
+    cursor: pointer;
+}
+
+/* Efecto al enfocar */
+.input-group select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Estilo del select cuando se pasa el cursor */
+.input-group select:hover {
+    border-color: #2575fc;
+}
+
+/* Personalización del desplegable (solo para navegadores compatibles) */
+.input-group select::-ms-expand {
+    display: none; /* Oculta la flecha en IE/Edge */
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .input-group select {
+        padding: 12px; /* Mantiene el padding en dispositivos pequeños */
+    }
+}
