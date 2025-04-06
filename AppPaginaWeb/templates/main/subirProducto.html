@@ -1,0 +1,126 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+Subir Producto
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style_subir_producto.css' %}">
+
+<h2 class="title">Subir Nuevo Producto 📦</h2>
+
+<!-- Contenedor principal para centrar la tarjeta -->
+<div class="form-container">
+    <div class="product-card">
+        <!-- Formulario para subir el producto -->
+        <form id="productoForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="nombre">Nombre del Producto:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="imagen">URL de Imagen:</label>
+                <input type="url" id="imagen" name="imagen" required>
+            </div>
+
+            <div class="form-group">
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado" required>
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="categoria">Categoría:</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="" disabled selected>Selecciona una categoría</option>
+                    <!-- Las opciones de categorías se llenarán mediante JavaScript -->
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Subir Producto</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Obtener usuario del localStorage
+    const user = JSON.parse(localStorage.getItem("usuario"));
+    const id_usuario = user.id;
+
+    // Llenar el select de categorías con las categorías obtenidas
+    fetch("categorias/" + id_usuario + "/")
+        .then(response => response.json())
+        .then(data => {
+            const selectCategoria = document.getElementById('categoria');
+            selectCategoria.innerHTML = '<option value="" disabled selected>Selecciona una categoría</option>';  // Limpiar el select
+
+            // Recorrer todas las categorías y agregar opciones al select
+            data.forEach(categoria => {
+                const option = document.createElement("option");
+                option.value = categoria.id;
+                option.textContent = categoria.nombre;
+                selectCategoria.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error("Error al obtener las categorías:", error);
+        });
+
+    // Manejar el envío del formulario
+    const form = document.getElementById('productoForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();  // Evitar que el formulario se envíe de manera tradicional
+
+        // Recoger los datos del formulario
+        const nombre = document.getElementById('nombre').value;
+        const descripcion = document.getElementById('descripcion').value;
+        const imagen = document.getElementById('imagen').value;
+        const estado = document.getElementById('estado').value;
+        const categoria = document.getElementById('categoria').value;
+
+        // Crear un objeto con los datos del producto
+        const producto = {
+            nombre: nombre,
+            descripcion: descripcion,
+            imagen_url: imagen,
+            estado: estado,
+            categoria_id: categoria,
+            negocio_id: id_usuario  // El negocio_id es el id del usuario
+        };
+
+        // Enviar los datos al servidor usando fetch
+        fetch("{% url 'registrar_producto' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(producto)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert("Error al registrar el producto: " + data.error);
+            } else {
+                alert("Producto registrado exitosamente.");
+                form.reset();  // Resetear el formulario
+            }
+        })
+        .catch(error => {
+            console.error("Error al registrar el producto:", error);
+            alert("Hubo un error al registrar el producto.");
+        });
+    });
+</script>
+
+{% endblock %}

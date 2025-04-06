@@ -7,6 +7,7 @@ urlpatterns = [
     path('nuevo_usuario/', views.nuevo_usuario, name='registrarse'),
     path('main_negocio/', views.main_negocio, name='main_negocio'),
     path('productos/', views.productos, name='productos'),
+    path('subir_producto/', views.subir_producto, name='subir_producto'),
 
     # Usuarios
     path('usuarios/', listar_usuarios, name='listar_usuarios'),
@@ -17,7 +18,7 @@ urlpatterns = [
 
 
     # Negocios
-    path('negocios/', listar_negocios, name='listar_negocios'),
+    path('productos/negocios/', listar_negocios, name='listar_negocios'),
     path('negocios/crear/', registrar_negocio, name='registrar_negocio'),
     path('negocios/actualizar/<int:negocio_id>/', actualizar_negocio, name='actualizar_negocio'),
     path('negocios/eliminar/<int:negocio_id>/', eliminar_negocio, name='eliminar_negocio'),
@@ -30,10 +31,12 @@ urlpatterns = [
     path('categorias/eliminar/<int:categoria_id>/', eliminar_categoria, name='eliminar_categoria'),
 
     # Productos
-    path('productos/', listar_productos, name='listar_productos'),
+    path('productos/listadoproductos/', listar_productos, name='listar_productos'),
     path('productos/crear/', registrar_producto, name='registrar_producto'),
     path('productos/actualizar/<int:producto_id>/', actualizar_producto, name='actualizar_producto'),
     path('productos/eliminar/<int:producto_id>/', eliminar_producto, name='eliminar_producto'),
+    path('subir_producto/categorias/<int:id_usuario>/', views.obtener_categoria_por_username, name='obtener_categoria_idusuario'),
+    path('subir_producto/categorias/<str:nombre_categoria>/', views.obtener_categoria_id_por_nombre, name='obtener_categoria_id_por_nombre'),
 
     # Comentarios
     path('comentarios/', listar_comentarios, name='listar_comentarios'),

@@ -77,7 +77,7 @@
                 localStorage.setItem("usuarioLogeado", usuario.nombre_usuario);
 
                 // Redirigir al inicio de sesión de usuario
-                window.location.href = "/";
+                window.location.href = "{% url 'productos' %}";
               } else {
                 mostrarError("Usuario o contraseña incorrectos.");
               }

@@ -1,0 +1,98 @@
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(216, 212, 212);
+    margin: 0;
+    padding: 0;
+}
+
+.title {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 2em;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: -55px;
+}
+
+/* Contenedor del formulario, centrado en la pantalla */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  /* Ocupa toda la altura de la ventana */
+    padding: 20px;
+}
+
+/* Estilos de la tarjeta */
+.product-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;  /* Ancho máximo de la tarjeta */
+    text-align: center;
+}
+
+/* Estilos para cada campo del formulario */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+.form-group label {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #333;
+    margin-top: 5px;
+}
+
+.form-group textarea {
+    resize: vertical;  /* Permitir redimensionar solo verticalmente */
+}
+
+/* Botón de envío */
+.submit-btn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Diseño responsive */
+@media (max-width: 768px) {
+    .product-card {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 1.8em;
+    }
+
+    .submit-btn {
+        font-size: 1em;
+    }
+}

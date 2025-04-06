@@ -17,6 +17,9 @@ def productos(request):
 def iniciar_sesion(request):
     return render(request, 'registration/login.html')
 
+def subir_producto(request):
+    return render(request, 'main/subirProducto.html')
+
 # Listar usuarios
 def listar_usuarios(request):
     usuarios = obtener_datos("usuarios")
@@ -105,6 +108,20 @@ def listar_categorias(request):
     categorias = obtener_datos("categorias")
     return JsonResponse({"categorias": categorias}, safe=False)
 
+def obtener_categoria_por_username(request, id_usuario):
+    # Obtén las categorías de alguna fuente (puede ser una base de datos, API externa, etc.)
+    categorias = obtener_datos("categorias")  # Asegúrate de que esta función devuelva los datos correctos
+    
+    # Filtra todas las categorías que coincidan con el negocio_id (id_usuario)
+    categorias_usuario = [c for c in categorias if c["negocio_id"] == id_usuario]
+
+    if categorias_usuario:
+        # Si se encuentran categorías, devuélvelas como JSON
+        return JsonResponse(categorias_usuario, safe=False)
+    else:
+        # Si no se encuentra ninguna categoría, devuelve un error 404
+        return JsonResponse({"error": "Categorías no encontradas"}, status=404)
+
 # Crear categoría
 @csrf_exempt
 def registrar_categoria(request):
@@ -112,6 +129,21 @@ def registrar_categoria(request):
         data = json.loads(request.body)
         categoria_creada = crear_dato("categorias", data)
         return JsonResponse(categoria_creada, safe=False)
+    
+from django.http import JsonResponse
+
+def obtener_categoria_id_por_nombre(request, nombre_categoria):
+    categorias = obtener_datos("categorias")
+    
+    categorias_filtradas = [c for c in categorias if c["nombre"].lower() == nombre_categoria.lower()]
+
+    if categorias_filtradas:
+        # Si se encuentran categorías que coinciden con el nombre, devuélvelas como JSON
+        return JsonResponse(categorias_filtradas, safe=False)
+    else:
+        # Si no se encuentra ninguna categoría, devuelve un error 404
+        return JsonResponse({"error": "Categoría no encontrada"}, status=404)
+
 
 # Actualizar categoría
 @csrf_exempt
