@@ -20,10 +20,16 @@ def iniciar_sesion(request):
 def subir_producto(request):
     return render(request, 'main/subirProducto.html')
 
+def editar_producto(request):
+    return render(request, 'main/editarProducto.html')
+
 # Listar usuarios
 def listar_usuarios(request):
     usuarios = obtener_datos("usuarios")
     return JsonResponse({"usuarios": usuarios}, safe=False)
+
+def mis_productos(request):
+    return render(request, 'main/misProductos.html')
 
 # Obtener usuario por nombre de usuario (username)
 def obtener_usuario_por_username(request, username):
@@ -165,6 +171,15 @@ def listar_productos(request):
     productos = obtener_datos("productos")
     return JsonResponse({"productos": productos}, safe=False)
 
+def obtener_producto_por_id(request, producto_id):
+    productos = obtener_datos("productos")
+    producto = next((p for p in productos if p["id"] == producto_id), None)
+
+    if producto:
+        return JsonResponse(producto, safe=False)
+    else:
+        return JsonResponse({"error": "Producto no encontrado"}, status=404)
+
 # Crear producto
 @csrf_exempt
 def registrar_producto(request):
@@ -173,13 +188,14 @@ def registrar_producto(request):
         producto_creado = crear_dato("productos", data)
         return JsonResponse(producto_creado, safe=False)
 
-# Actualizar producto
 @csrf_exempt
 def actualizar_producto(request, producto_id):
     if request.method == "PUT":
         data = json.loads(request.body)
         producto_actualizado = actualizar_dato("productos", producto_id, data)
         return JsonResponse(producto_actualizado, safe=False)
+    else:
+        return JsonResponse({"error": "Método no permitido"}, status=405)
 
 # Eliminar producto
 @csrf_exempt
