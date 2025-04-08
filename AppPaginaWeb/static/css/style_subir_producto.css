@@ -1,18 +1,18 @@
 /* Estilos generales */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgb(216, 212, 212);
     margin: 0;
     padding: 0;
 }
 
+/* Título */
 .title {
     margin-top: 20px;
     text-align: center;
     font-size: 2em;
     color: #2c3e50;
     font-weight: 700;
-    margin-bottom: -55px;
+    margin-bottom: 20px; /* Ajustamos el margen inferior para que no se sobreponga */
 }
 
 /* Contenedor del formulario, centrado en la pantalla */
@@ -20,8 +20,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;  /* Ocupa toda la altura de la ventana */
+    height: 100%;  /* Hacer que el contenedor ocupe la altura disponible */
     padding: 20px;
+    min-height: 500px; /* Establecer una altura mínima para pantallas pequeñas */
+    margin-top: 20px; /* Evitar que se solape con el navbar en pantallas pequeñas */
 }
 
 /* Estilos de la tarjeta */
@@ -95,4 +97,25 @@ body {
     .submit-btn {
         font-size: 1em;
     }
+
+    /* Para que el formulario no quede tan alto en pantallas pequeñas */
+    .form-container {
+        height: auto;
+        margin-top: 20px;
+    }
+}
+
+.volver-btn {
+    margin-top: 20px;
+    position: absolute; /* Cambiado de fixed a absolute */
+    top: 100px; /* Ajusta según la altura de tu navbar */
+    left: 20px; /* Ahora está a la izquierda */
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }

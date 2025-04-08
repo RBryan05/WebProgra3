@@ -8,10 +8,13 @@ Subir Producto
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style_subir_producto.css' %}">
 
-<h2 class="title">Subir Nuevo Producto 📦</h2>
+<h2 class="title">Subir Nuevo Producto</h2>
 
 <!-- Contenedor principal para centrar la tarjeta -->
 <div class="form-container">
+    <a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'main_negocio' %}">
+        <i class="bi bi-box-arrow-left"></i>
+    </a> 
     <div class="product-card">
         <!-- Formulario para subir el producto -->
         <form id="productoForm">

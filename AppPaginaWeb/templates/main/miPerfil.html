@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+Perfil de Usuario
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_perfil.css' %}">
+<h2 class="title">Mi perfil</h2>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg p-4 rounded-4">
+                <div class="text-center mb-4">
+                    <img src="{% static 'img/default_profile.avif' %}" alt="Foto de perfil" class="rounded-circle shadow" width="120" height="120">
+                    <h3 class="mt-3 fw-bold text-primary" id="nombre-completo">Juan Pérez</h3>
+                    <p class="text-muted" id="username">@juan123</p>
+                </div>
+                <hr>
+                <div class="px-3">
+                    <p><i class="bi bi-envelope-fill me-2 text-primary"></i><strong>Correo:</strong> juan@example.com</p>
+                    <p><i class="bi bi-geo-alt-fill me-2 text-primary"></i><strong>Dirección:</strong> Calle Falsa 123, Ciudad</p>
+                    <p><i class="bi bi-telephone-fill me-2 text-primary"></i><strong>Teléfono:</strong> +123456789</p>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="#" class="btn btn-outline-primary px-4 py-2">
+                        <i class="bi bi-pencil me-2"></i>Editar Perfil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

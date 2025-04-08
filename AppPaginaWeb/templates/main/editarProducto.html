@@ -8,10 +8,15 @@ Editar Producto
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style_subir_producto.css' %}">
 
-<h2 class="title">Editar Producto 📦</h2>
+<h2 class="title">Editar Producto</h2>
 
 <!-- Contenedor principal para centrar la tarjeta -->
 <div class="form-container">
+
+    <!-- Botón circular con ícono de salir -->
+    <a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'mis_productos' %}">
+        <i class="bi bi-box-arrow-left"></i>
+    </a>    
     <div class="product-card">
         <!-- Formulario para editar el producto -->
         <form id="productoForm">
@@ -104,7 +109,7 @@ Editar Producto
 
     // Manejar el envío del formulario
     const form = document.getElementById('productoForm');
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();  // Evitar que el formulario se envíe de manera tradicional
 
         // Recoger los datos del formulario

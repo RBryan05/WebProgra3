@@ -1,0 +1,85 @@
+/* Fondo general */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tarjeta de perfil */
+.card {
+    background-color: #fff;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Título */
+.title {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 2em;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+/* Imagen de perfil */
+.card img {
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Nombre del usuario */
+.card h3 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+/* Username */
+.card p#username {
+    margin-bottom: 15px;
+    font-size: 0.95em;
+}
+
+/* Detalles del perfil */
+.card p {
+    font-size: 1em;
+    margin: 10px 0;
+}
+
+/* Iconos en los datos */
+.card p i {
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+
+/* Botón de editar */
+.card .btn {
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.card .btn:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+    .card {
+        padding: 20px;
+    }
+
+    .card img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .card h3 {
+        font-size: 1.4em;
+    }
+
+    .card p {
+        font-size: 0.95em;
+    }
+}

@@ -23,6 +23,9 @@ def subir_producto(request):
 def editar_producto(request):
     return render(request, 'main/editarProducto.html')
 
+def mi_perfil(request):
+    return render(request, 'main/miPerfil.html')
+
 # Listar usuarios
 def listar_usuarios(request):
     usuarios = obtener_datos("usuarios")

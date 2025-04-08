@@ -3,17 +3,69 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(180deg, #3498db, rgba(41, 127, 185, 0.512));
+    background: linear-gradient(180deg,  #3498db, rgba(41, 127, 185, 0.512));
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
+    position: relative;  /* Agregado para permitir el uso de z-index */
 }
 
+/* Fondo animado */
+.background {
+    position: fixed; /* Fijo para que siempre esté en el fondo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Que cubra toda la pantalla */
+    z-index: -1; /* Para que quede detrás del contenido */
+    overflow: hidden;
+}
+
+/* Aseguramos que las formas estén por debajo del contenido */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    background-color: #ffffff;
+    opacity: 0.6;
+    z-index: -1; /* Colocamos la animación debajo del contenido */
+}
+
+/* Bolas más grandes y más lentas */
+.shape1 { width: 300px; height: 300px; top: -50px; left: -50px; animation: move1 10s infinite ease-in-out; }
+.shape2 { width: 400px; height: 400px; top: 20%; right: -60px; animation: move2 12s infinite ease-in-out; }
+.shape3 { width: 600px; height: 600px; top: 60%; left: 40%; animation: move3 14s infinite ease-in-out; }
+.shape4 { width: 200px; height: 200px; top: 80%; left: 20%; animation: move4 11s infinite ease-in-out; }
+
+/* Animaciones más lentas y suaves */
+@keyframes move1 {
+    0% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(30px) translateY(60px); }
+    100% { transform: translateX(0) translateY(0); }
+}
+@keyframes move2 {
+    0% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(-60px) translateY(-30px); }
+    100% { transform: translateX(0) translateY(0); }
+}
+@keyframes move3 {
+    0% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(-120px) translateY(-80px); }
+    100% { transform: translateX(0) translateY(0); }
+}
+@keyframes move4 {
+    0% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(50px) translateY(30px); }
+    100% { transform: translateX(0) translateY(0); }
+}
+
+/* Estilos de contenido (como los formularios) para asegurar que estén por encima de la animación */
 .login-container {
     width: 100%;
     max-width: 400px;
     padding: 20px;
+    z-index: 10; /* Asegura que el contenido esté por encima de la animación */
+    position: relative; /* Permite el uso de z-index */
 }
 
 .login-box {
@@ -145,4 +197,10 @@ button:hover {
 .input-group select:focus {
     border-color: #3498db;
     outline: none;
+}
+
+.registrate-aqui{
+    text-decoration: none; /* Elimina cualquier subrayado del link */
+    color: rgb(28, 81, 225); /* Color del texto */
+    font-weight: bold; /* Negrita */
 }

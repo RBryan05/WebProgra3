@@ -8,7 +8,7 @@ html, body {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgb(216, 212, 212);
+    background: linear-gradient(180deg,  #3498db, rgba(41, 127, 185, 0.512));
     position: relative;
 }
 
@@ -60,6 +60,8 @@ body {
 
 .navbar {
     min-height: 80px;  /* Ajusta la altura del navbar */
+    margin-bottom: 20px;
+    background-color:rgb(222, 246, 242, 0.93); /* Fondo blanco con opacidad */
 }
 
 .navbar .container-fluid {

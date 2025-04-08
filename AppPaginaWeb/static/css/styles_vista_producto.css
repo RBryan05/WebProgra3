@@ -1,6 +1,5 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgb(216, 212, 212);
 }
 
 .title {
@@ -28,7 +27,7 @@ body {
 
 .product-card img {
     width: 100%;
-    height: 200px; /* Aseguramos un alto fijo */
+    max-height: 500px; /* Aseguramos un alto fijo */
     object-fit: cover; /* Ajusta la imagen para que no se distorsione */
     border-radius: 10px;
 }
@@ -85,4 +84,18 @@ body {
     }
 }
 
-/* Eliminar la regla global para img para evitar conflicto */
+.volver-btn {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    position: absolute; /* Cambiado de fixed a absolute */
+    top: 100px; /* Ajusta según la altura de tu navbar */
+    left: 20px; /* Ahora está a la izquierda */
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
