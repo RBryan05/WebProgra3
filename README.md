@@ -22,4 +22,4 @@
 
     python manage.py runserver
 
-**7.  La consola mostrará un enlace (http://127.0.0.1:8000/) para apreciar el proyecto, abrir el enlace con el comando Ctrl + Clicl Izquiero sobre el enlace**
+**7.  La consola mostrará un enlace (http://127.0.0.1:8000/) para apreciar el proyecto, abrir el enlace con el comando Ctrl + Click Izquiero sobre el enlace**
