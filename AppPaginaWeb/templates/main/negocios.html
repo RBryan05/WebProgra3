@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Listado de Negocios{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_negocios.css' %}">
+
+<h2 class="title">Negocios</h2>
+
+<div class="negocios-grid" id="negocios-container"></div>
+
+<!-- Contenedor para datos estáticos -->
+<div id="app-data" 
+     data-default-profile="{% static 'img/default_profile.avif' %}">
+</div>
+
+<!-- Incluir JavaScript externo -->
+<script src="{% static 'js/listado_negocios.js' %}"></script>
+{% endblock %}

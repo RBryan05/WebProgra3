@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Información del Negocio{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_infoNegocios.css' %}">
+
+<a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'negocios' %}">
+    <i class="bi bi-x-lg"></i>
+</a> 
+
+<h1 class="title"></h1> <!-- El nombre del negocio se llenará con JS -->
+
+<div class="container">
+    <!-- Contenedor izquierdo: Foto + info del negocio -->
+    <div class="col-izquierda">
+        <div class="foto-perfil">
+            <img src="" alt="Foto del negocio" id="fotoPerfil"> <!-- La foto se llenará con JS -->
+        </div>
+
+        <div class="info-negocio">
+            <div class="info-detalles">
+                <p class="direccion-negocio" id="direccionNegocio"></p> <!-- Dirección se llenará con JS -->
+                <p class="descripcion-negocio" id="descripcionNegocio"></p> <!-- Descripción se llenará con JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Categorías del Negocio -->
+    <div class="categorias-negocio">
+        <h2>Categorías</h2>
+        <div class="categoria-cards" id="categoriaCards">
+            <!-- Las tarjetas de categorías se llenarán dinámicamente con JS -->
+        </div>
+    </div>
+</div>
+
+<!-- Agregar un contenedor oculto para pasar datos al JS -->
+<div id="static-data" data-default-profile="{% static 'img/default_profile.avif' %}"></div>
+
+<script src="{% static 'js/informacionNegocio.js' %}"></script>
+
+{% endblock %}

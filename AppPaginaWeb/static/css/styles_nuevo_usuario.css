@@ -68,7 +68,7 @@ body {
 }
 
 .register-box {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.9);
     padding: 30px;
     border-radius: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -149,16 +149,6 @@ button:hover {
     }
 }
 
-.google-btn i {
-    font-size: 1.2em;
-    color: #EA4335;  
-}
-
-.google-btn:hover {
-    background: rgba(255, 165, 0, 0.1); /* Fondo naranja suave */
-    transform: scale(1.03);
-}
-
 /* Asegurar que el margen sea igual para todos los elementos */
 .input-group,
 .google-btn,
@@ -205,12 +195,11 @@ button {
 }
 
 .volver-btn {
-    margin-top: 20px;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 50px;
-    height: 50px;
+    position: absolute;   /* Asegura que el botón quede fijo en la esquina */
+    top: 20px;         /* Lo coloca a 20px desde el borde superior */
+    left: 20px;        /* Lo coloca a 20px desde el borde izquierdo */
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -223,9 +212,9 @@ button {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    text-decoration: none; /* Elimina cualquier subrayado del link */
 }
 
+/* Hover effects */
 .volver-btn:hover {
     background-color: #0056b3;
     transform: scale(1.1);

@@ -7,14 +7,14 @@ Subir Producto
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style_subir_producto.css' %}">
-
+<a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'main_negocio' %}">
+    <i class="bi bi-x-lg"></i>
+</a>
 <h2 class="title">Subir Nuevo Producto</h2>
 
 <!-- Contenedor principal para centrar la tarjeta -->
 <div class="form-container">
-    <a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'main_negocio' %}">
-        <i class="bi bi-box-arrow-left"></i>
-    </a> 
+
     <div class="product-card">
         <!-- Formulario para subir el producto -->
         <form id="productoForm">
@@ -22,6 +22,11 @@ Subir Producto
             <div class="form-group">
                 <label for="nombre">Nombre del Producto:</label>
                 <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="text" id="precio" name="precio" required>
             </div>
 
             <div class="form-group">
@@ -81,11 +86,12 @@ Subir Producto
 
     // Manejar el envío del formulario
     const form = document.getElementById('productoForm');
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();  // Evitar que el formulario se envíe de manera tradicional
 
         // Recoger los datos del formulario
         const nombre = document.getElementById('nombre').value;
+        const precio = document.getElementById('precio').value;
         const descripcion = document.getElementById('descripcion').value;
         const imagen = document.getElementById('imagen').value;
         const estado = document.getElementById('estado').value;
@@ -94,6 +100,7 @@ Subir Producto
         // Crear un objeto con los datos del producto
         const producto = {
             nombre: nombre,
+            precio: precio,
             descripcion: descripcion,
             imagen_url: imagen,
             estado: estado,
@@ -110,19 +117,19 @@ Subir Producto
             },
             body: JSON.stringify(producto)
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert("Error al registrar el producto: " + data.error);
-            } else {
-                alert("Producto registrado exitosamente.");
-                form.reset();  // Resetear el formulario
-            }
-        })
-        .catch(error => {
-            console.error("Error al registrar el producto:", error);
-            alert("Hubo un error al registrar el producto.");
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error al registrar el producto: " + data.error);
+                } else {
+                    alert("Producto registrado exitosamente.");
+                    form.reset();  // Resetear el formulario
+                }
+            })
+            .catch(error => {
+                console.error("Error al registrar el producto:", error);
+                alert("Hubo un error al registrar el producto.");
+            });
     });
 </script>
 

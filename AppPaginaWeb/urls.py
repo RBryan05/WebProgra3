@@ -11,6 +11,9 @@ urlpatterns = [
     path('mis_productos/', views.mis_productos, name='mis_productos'),
     path('editar_producto/', views.editar_producto, name='editar_producto'),
     path('mi_perfil/', views.mi_perfil, name='mi_perfil'),
+    path('negocios/', views.negocios, name='negocios'),
+    path('negocios/infonegocio/', views.info_negocio, name='info_negocio'),
+    path('categoriaproductos/', views.productos_categoria, name='categoriaproductos'),
 
     # Usuarios
     path('usuarios/', listar_usuarios, name='listar_usuarios'),
@@ -18,15 +21,20 @@ urlpatterns = [
     path('usuarios/actualizar/<int:usuario_id>/', actualizar_usuario, name='actualizar_usuario'),
     path('usuarios/eliminar/<int:usuario_id>/', eliminar_usuario, name='eliminar_usuario'),
     path('api/usuarios/<str:username>/', views.obtener_usuario_por_username, name='obtener_usuario'),
+    path('mi_perfil/negocios/<str:username>/', views.obtener_negocio_por_username, name='obtener_negocio'),
+    path('mi_perfil/usuario/<str:username>/', views.obtener_usuario_por_username, name='obtener_usuario'),
 
 
     # Negocios
     path('productos/negocios/', listar_negocios, name='listar_negocios'),
+    path('negocios/listanegocios/', listar_negocios, name='listar_negocios_listado'),
     path('mis_productos/negocios/', listar_negocios, name='listar_negocios'),
     path('negocios/crear/', registrar_negocio, name='registrar_negocio'),
     path('negocios/actualizar/<int:negocio_id>/', actualizar_negocio, name='actualizar_negocio'),
     path('negocios/eliminar/<int:negocio_id>/', eliminar_negocio, name='eliminar_negocio'),
     path('api/negocios/<str:username>/', views.obtener_negocio_por_username, name='obtener_negocio'),
+    path('negocios/infonegocio/<int:id>/', views.obtener_negocio_por_id, name='obtener_negocio_id'),
+    path('negocios/categorias/<int:id_usuario>/', views.obtener_categoria_por_username, name='obtener_categoria_idusuario_negocios'),
 
     # Categorías
     path('categorias/', listar_categorias, name='listar_categorias'),
@@ -46,6 +54,7 @@ urlpatterns = [
     path('subir_producto/categorias/<str:nombre_categoria>/', views.obtener_categoria_id_por_nombre, name='obtener_categoria_id_por_nombre'),
     path('editar_producto/producto/id/<int:producto_id>/', views.obtener_producto_por_id, name='obtener_producto_por_id'),
     path('mis_productos/producto/id/<int:producto_id>/', views.obtener_producto_por_id, name='obtener_producto_por_id_misproductos'),
+    path('categoriaproductos/productos/<int:id>/', views.listar_productos_por_categoria, name='obtener_producto_id_categoria'),
 
     # Comentarios
     path('comentarios/', listar_comentarios, name='listar_comentarios'),

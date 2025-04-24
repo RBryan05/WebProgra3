@@ -12,7 +12,10 @@ def nuevo_usuario(request):
     return render(request, 'registration/registrarse.html')
 
 def productos(request):
-    return render(request, 'main/productos.html')
+    return render(request, 'main/productos.html', {
+        'activar_buscador': True,
+        'pagina_actual': 'productos',
+    })
 
 def iniciar_sesion(request):
     return render(request, 'registration/login.html')
@@ -24,7 +27,20 @@ def editar_producto(request):
     return render(request, 'main/editarProducto.html')
 
 def mi_perfil(request):
-    return render(request, 'main/miPerfil.html')
+    return render(request, 'main/miPerfil.html', {
+        'mi_perfil': True
+    })
+
+def negocios(request):
+    return render(request, 'main/negocios.html', {
+        'pagina_actual': 'negocios',
+        'activar_buscador': True,
+    })
+
+def info_negocio(request):
+    return render(request, 'main/informacionNegocio.html', {
+        'activar_buscador': True,
+    })
 
 # Listar usuarios
 def listar_usuarios(request):
@@ -32,7 +48,14 @@ def listar_usuarios(request):
     return JsonResponse({"usuarios": usuarios}, safe=False)
 
 def mis_productos(request):
-    return render(request, 'main/misProductos.html')
+    return render(request, 'main/misProductos.html', {
+        'activar_buscador': True,     
+    })
+
+def productos_categoria(request):
+    return render(request, 'main/productosCategoria.html', {
+        'activar_buscador': True,     
+    })
 
 # Obtener usuario por nombre de usuario (username)
 def obtener_usuario_por_username(request, username):
@@ -81,6 +104,14 @@ def obtener_negocio_por_username(request, username):
     negocios = obtener_datos("negocios")
     negocio = next((n for n in negocios if n["nombre_usuario"] == username), None)
 
+    if negocio:
+        return JsonResponse(negocio, safe=False)
+    else:
+        return JsonResponse({"error": "Negocio no encontrado"}, status=404)
+    
+def obtener_negocio_por_id(request, id):
+    negocios = obtener_datos("negocios")
+    negocio = next((n for n in negocios if n["id"] == id), None)
     if negocio:
         return JsonResponse(negocio, safe=False)
     else:
@@ -182,6 +213,15 @@ def obtener_producto_por_id(request, producto_id):
         return JsonResponse(producto, safe=False)
     else:
         return JsonResponse({"error": "Producto no encontrado"}, status=404)
+
+# Listar productos por categoría
+def listar_productos_por_categoria(request, id):
+    productos = obtener_datos("productos")  # Obtener todos los productos
+
+    # Filtrar productos donde el id de la categoría coincida con el id pasado
+    productos_filtrados = [p for p in productos if p["categoria_id"] == id]
+
+    return JsonResponse({"productos": productos_filtrados}, safe=False)
 
 # Crear producto
 @csrf_exempt

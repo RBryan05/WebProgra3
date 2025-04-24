@@ -7,7 +7,6 @@ body {
 
 /* Título */
 .title {
-    margin-top: 20px;
     text-align: center;
     font-size: 2em;
     color: #2c3e50;
@@ -106,8 +105,8 @@ body {
 }
 
 .volver-btn {
-    margin-top: 20px;
-    position: absolute; /* Cambiado de fixed a absolute */
+    margin-top: 15px;
+    margin-left: 20px;
     top: 100px; /* Ajusta según la altura de tu navbar */
     left: 20px; /* Ahora está a la izquierda */
     width: 50px;
@@ -118,4 +117,10 @@ body {
     font-size: 1.3em;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Hover effects */
+.volver-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
 }

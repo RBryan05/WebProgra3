@@ -8,7 +8,7 @@ html, body {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(180deg,  #3498db, rgba(41, 127, 185, 0.512));
+    background-color:rgb(52, 152, 219, 0.75);
     position: relative;
 }
 
@@ -31,7 +31,7 @@ body {
 }
 
 /* Bolas más grandes y más lentas */
-.shape1 { width: 300px; height: 300px; top: -50px; left: -50px; animation: move1 10s infinite ease-in-out; }
+.shape1 { width: 300px; height: 300px; top: -50px; left: -50px; animation: move1 7s infinite ease-in-out; }
 .shape2 { width: 400px; height: 400px; top: 20%; right: -60px; animation: move2 12s infinite ease-in-out; }
 .shape3 { width: 600px; height: 600px; top: 60%; left: 40%; animation: move3 14s infinite ease-in-out; }
 .shape4 { width: 200px; height: 200px; top: 80%; left: 20%; animation: move4 11s infinite ease-in-out; }
@@ -39,7 +39,7 @@ body {
 /* Animaciones más lentas y suaves */
 @keyframes move1 {
     0% { transform: translateX(0) translateY(0); }
-    50% { transform: translateX(30px) translateY(60px); }
+    50% { transform: translateX(30px) translateY(100px); }
     100% { transform: translateX(0) translateY(0); }
 }
 @keyframes move2 {
@@ -61,10 +61,126 @@ body {
 .navbar {
     min-height: 80px;  /* Ajusta la altura del navbar */
     margin-bottom: 20px;
-    background-color:rgb(222, 246, 242, 0.93); /* Fondo blanco con opacidad */
+    background-color:rgba(215, 231, 245, 0.93); /* Fondo blanco con opacidad */
 }
 
 .navbar .container-fluid {
     padding-left: 50px;
     padding-right: 50px;
 }
+
+.dropdown-menu {
+    background-color: rgba(215, 231, 245, 0.93); /* Fondo blanco con opacidad */
+    
+}
+
+.dropdown-item:hover {
+    background-color: rgba(169, 198, 223, 0.93); /* Color de fondo al pasar el mouse */
+    color: white; /* Color del texto al pasar el mouse */
+}
+
+.buscador {
+    width: 400px;
+}
+/* Estilos personalizados */
+.hero-container {
+    background: rgba(255, 255, 255, 0.85);
+    /* Fondo semitransparente */
+    padding: 50px 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+.navbar-nav .nav-item .nav-link {
+    font-size: 1.25rem;
+    /* Mantener la consistencia en el tamaño de la fuente */
+}
+
+/* Contenedor buscador */
+.contenedor-buscador {
+    padding-left: 0;
+}
+
+/* Items del navbar */
+.navbar-nav .nav-item .nav-link {
+    font-size: 1.25rem;
+    padding: 10px 15px;
+    transition: all 0.3s;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    transform: translateY(-2px);
+}
+
+/* Estilos para móvil */
+@media (max-width: 1400px) {
+    .navbar-collapse {
+        background-color: rgba(215, 231, 245, 0.98);
+        padding: 20px;
+        border-radius: 0 0 10px 10px;
+        margin-top: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dropdown-menu {
+        background-color: rgba(200, 220, 240, 0.98);
+        margin-left: 15px;
+        width: calc(100% - 30px);
+    }
+}
+
+/* Hero container */
+.hero-container {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 40px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .hero-container {
+        padding: 50px 30px;
+        margin: 30px auto;
+    }
+}
+
+  /* Para asegurar que los elementos se apilen verticalmente en pantallas pequeñas */
+  @media (max-width: 1400px) {
+    .navbar-collapse {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .navbar-nav {
+      width: 100%;
+    }
+
+    .navbar .form-control,
+    .navbar form.d-flex {
+      width: 100%;
+      text-align: left;
+    }
+
+    .navbar form.d-flex {
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    #user-info-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #user-info-container .btn,
+    #user-info-container .dropdown {
+      width: 100%;
+    }
+  }
+

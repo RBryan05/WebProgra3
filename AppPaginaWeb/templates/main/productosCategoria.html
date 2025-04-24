@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Pantalla de Productos por Categoría{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_vista_producto.css' %}">
+<a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'info_negocio' %}">
+    <i class="bi bi-x-lg"></i>
+</a> 
+<h2 id="title" class="title">Productos en esta Categoria</h2>
+<section class="product-grid" id="product-grid">
+    <!-- Los productos se agregarán aquí dinámicamente -->
+</section>
+
+<!-- Elemento para pasar datos estáticos al JS -->
+<div id="app-config" 
+     data-default-image="{% static 'img/default_product.webp' %}"
+     data-api-base="/categoriaproductos/productos/">
+</div>
+
+<!-- Incluimos el JavaScript externo -->
+<script src="{% static 'js/productos_categoria.js' %}"></script>
+{% endblock %}

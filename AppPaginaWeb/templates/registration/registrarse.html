@@ -14,16 +14,18 @@
 </head>
 
 <body>
+
     <a class="volver-btn" title="Volver" href="{% url 'login' %}">
-        <i class="bi bi-box-arrow-left"></i>
-    </a> 
+        <i class="bi bi-x-lg"></i>
+    </a>
+
     <div class="background">
         <div class="shape shape1"></div>
         <div class="shape shape2"></div>
         <div class="shape shape3"></div>
         <div class="shape shape4"></div>
     </div>
-      
+
     <section class="register-container">
         <div class="register-box">
             <h2>Regístrate</h2>
@@ -62,85 +64,11 @@
         </div>
     </section>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <script>
-        // Función que maneja el envío del formulario
-        async function registrarUsuario(event) {
-            event.preventDefault();  // Evitar el envío tradicional del formulario
 
-            // Recoger los datos del formulario
-            const nombre = document.getElementById('name').value;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const accountType = document.getElementById('account-type').value;
-
-            // Validar que las contraseñas coincidan
-            if (password !== confirmPassword) {
-                alert("Las contraseñas no coinciden.");
-                return;
-            }
-
-            // Preparar los datos a enviar
-            const datos = {
-                nombre_usuario: username,  // Este campo puede ajustarse según tu lógica
-                nombre: nombre,
-                password: password,
-            };
-
-            // Dependiendo del tipo de cuenta, enviar la solicitud al endpoint correspondiente
-            try {
-                let response;
-
-                if (accountType === 'negocio') {
-                    // Enviar los datos a la API para registrar un negocio
-                    response = await fetch('/negocios/crear/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  // Incluir CSRF token
-                        },
-                        body: JSON.stringify(datos)  // Enviar los datos como JSON
-                    });
-                } else if (accountType === 'usuario') {
-                    // Enviar los datos a la API para registrar un usuario
-                    response = await fetch('/usuarios/crear/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  // Incluir CSRF token
-                        },
-                        body: JSON.stringify(datos)  // Enviar los datos como JSON
-                    });
-                }
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert("Usuario registrado exitosamente");
-                    document.getElementById('error-message').textContent = "";
-                    // Si el tipo de cuenta es 'negocio', redirigir a la página de inicio de negocio
-                    if (accountType === 'negocio') {
-                        localStorage.setItem("usuario", JSON.stringify(data));
-                        console.log("Usuario registrado:", data);
-                        // Guardar datos en localStorage (o sessionStorage)
-                        window.location.href = "{% url 'main_negocio' %}";
-                    } else {
-                        // Redirigir o limpiar el formulario si es necesario
-                        document.getElementById('register-form').reset();
-                    }
-                } else {
-                    document.getElementById('error-message').textContent = data.error || "Error al registrar el usuario.";
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert("Hubo un problema al registrar el usuario.");
-            }
-        }
-
-        // Llamar a la función cuando se envíe el formulario
-        document.getElementById('register-form').addEventListener('submit', registrarUsuario);
-
-    </script>
+    <script id="registro-script" src="{% static 'js/registrarse.js' %}" data-url-usuario="{% url 'registrar_usuario' %}"
+        data-url-negocio="{% url 'registrar_negocio' %}" data-redirect-negocio="{% url 'main_negocio' %}"
+        data-redirect-usuario="{% url 'productos' %}">
+        </script>
 </body>
 
 </html>

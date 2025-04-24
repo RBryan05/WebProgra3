@@ -1,9 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block title %}
-Pantalla de Inicio
-{% endblock %}
+{% block title %}Pantalla de Inicio{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/styles_vista_producto.css' %}">
@@ -13,78 +11,9 @@ Pantalla de Inicio
     <!-- Los productos se agregarán aquí dinámicamente -->
 </section>
 
-<script>
-    // Función para formatear la fecha
-    function formatDate(dateString) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', options);
-    }
+<!-- Solo pasamos la imagen por defecto como data attribute -->
+<div id="app-data" data-default-image="{% static 'img/default_product.webp' %}"></div>
 
-    // Obtener los productos y los negocios de manera simultánea
-    fetch('negocios/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error en la respuesta del servidor de negocios: " + response.status);
-            }
-            return response.json();  // Convertir la respuesta a JSON
-        })
-        .then(data => {
-            // Ahora accedemos a la propiedad 'negocios' que contiene el array
-            const negocios = data.negocios;
-            console.log("Negocios obtenidos:", negocios); // Verifica lo que devuelve el backend
-
-            // Obtener los productos
-            fetch('listadoproductos/')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Error en la respuesta del servidor de productos: " + response.status);
-                    }
-                    return response.json();  // Convertir la respuesta a JSON
-                })
-                .then(data => {
-                    console.log("Productos obtenidos:", data); // Verifica lo que devuelve el backend
-
-                    const productGrid = document.getElementById('product-grid');
-                    
-                    // Verificar si la respuesta contiene la propiedad 'productos' y si es un array
-                    if (data.productos && Array.isArray(data.productos)) {
-                        // Filtrar solo productos con estado "activo"
-                        const productosActivos = data.productos.filter(producto => producto.estado === "activo");
-
-                        // Recorrer los productos activos y agregar los elementos al HTML
-                        productosActivos.forEach(producto => {
-                            const productCard = document.createElement('div');
-                            productCard.classList.add('product-card');
-
-                            // Buscar el nombre del negocio usando el negocio_id del producto
-                            const negocio = negocios.find(negocio => negocio.id === producto.negocio_id);
-                            const negocioName = negocio ? negocio.nombre : "Negocio desconocido";  // Si no se encuentra, mostrar "Negocio desconocido"
-
-                            // Crear el contenido de cada tarjeta de producto
-                            productCard.innerHTML = `
-                                <img src="${producto.imagen_url || '{% static "img/default_product.webp" %}'}" alt="${producto.nombre}" />
-                                <h3>${producto.nombre}</h3>
-                                <p>${producto.descripcion}</p>
-                                <p class="price">$${producto.precio}</p>
-                                <p><Publicado por:</strong> ${negocioName}</p>
-                                <p>Publicado el ${formatDate(producto.creado_en)}</p>
-                                <button>Agregar a Favoritos</button>
-                            `;
-
-                            // Añadir la tarjeta al contenedor
-                            productGrid.appendChild(productCard);
-                        });
-                    } else {
-                        console.error("La respuesta no contiene productos válidos.", data);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al obtener los productos:", error);
-                });
-        })
-        .catch(error => {
-            console.error("Error al obtener los negocios:", error);
-        });
-</script>
+<!-- Incluimos el JavaScript externo -->
+<script src="{% static 'js/productos.js' %}"></script>
 {% endblock %}

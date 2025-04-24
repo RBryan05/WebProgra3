@@ -3,7 +3,6 @@ body {
 }
 
 .title {
-    margin-top: 20px;
     text-align: center;
     font-size: 2em;
     color: #2c3e50;
@@ -23,12 +22,21 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.315);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; /* Asegura que ocupe todo el alto del grid item */
+    box-sizing: border-box;
+    overflow: hidden; /* Evita desbordes */
 }
 
 .product-card img {
     width: 100%;
-    max-height: 500px; /* Aseguramos un alto fijo */
-    object-fit: cover; /* Ajusta la imagen para que no se distorsione */
+    height: 100%; /* Aseguramos que la altura sea igual al ancho */
+    max-width: 400px;  /* Máximo ancho */
+    max-height: 400px; /* Máximo alto */
+    object-fit: contain; /* Ajusta la imagen para que no se corte, mantiene la proporción */
+    object-position: center; /* Centra la imagen dentro del contenedor */
     border-radius: 10px;
 }
 
@@ -86,8 +94,7 @@ body {
 
 .volver-btn {
     margin-top: 15px;
-    margin-bottom: 20px;
-    position: absolute; /* Cambiado de fixed a absolute */
+    margin-left: 20px;
     top: 100px; /* Ajusta según la altura de tu navbar */
     left: 20px; /* Ahora está a la izquierda */
     width: 50px;
@@ -98,4 +105,10 @@ body {
     font-size: 1.3em;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Hover effects */
+.volver-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
 }

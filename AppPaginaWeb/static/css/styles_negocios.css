@@ -1,0 +1,64 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 2em;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.negocios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.tarjeta-negocio {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.315);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.tarjeta-negocio:hover {
+    transform: scale(1.03);
+}
+
+.tarjeta-negocio img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 200px;
+}
+
+.nombre-negocio {
+    font-size: 1.3em;
+    margin: 10px 0;
+    color: #2c3e50;
+}
+
+.direccion-negocio {
+    color: #5b5a5a;
+    font-size: 1em;
+}
+
+.mas-info {
+    display: inline-block;
+    margin-top: 10px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.mas-info:hover {
+    color: #165985;
+}
