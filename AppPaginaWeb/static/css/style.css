@@ -8,8 +8,22 @@ html, body {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color:rgb(52, 152, 219, 0.75);
+    background-color: rgb(52, 152, 219, 0.75);
     position: relative;
+    padding-top: 120px; /* Ajusta el espacio para evitar que el contenido quede cubierto */
+}
+
+/* Navbar fijo en la parte superior */
+.navbar {
+    position: fixed; /* Fijo en la parte superior */
+    top: 0; /* Se mantiene en la parte superior */
+    left: 0; /* Se mantiene a la izquierda */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    min-height: 80px;  /* Ajusta la altura del navbar */
+    margin-bottom: 20px;
+    background-color: rgba(215, 231, 245, 0.93); /* Fondo blanco con opacidad */
+    z-index: 1000; /* Asegura que quede encima de otros elementos */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* Añade sombra para hacerlo resaltar */
 }
 
 /* Fondo animado */
@@ -30,7 +44,7 @@ body {
     opacity: 0.6;
 }
 
-/* Bolas más grandes y más lentas */
+/* Animaciones de las formas */
 .shape1 { width: 300px; height: 300px; top: -50px; left: -50px; animation: move1 7s infinite ease-in-out; }
 .shape2 { width: 400px; height: 400px; top: 20%; right: -60px; animation: move2 12s infinite ease-in-out; }
 .shape3 { width: 600px; height: 600px; top: 60%; left: 40%; animation: move3 14s infinite ease-in-out; }
@@ -58,53 +72,13 @@ body {
     100% { transform: translateX(0) translateY(0); }
 }
 
-.navbar {
-    min-height: 80px;  /* Ajusta la altura del navbar */
-    margin-bottom: 20px;
-    background-color:rgba(215, 231, 245, 0.93); /* Fondo blanco con opacidad */
-}
-
+/* Estilos del Navbar */
 .navbar .container-fluid {
     padding-left: 50px;
     padding-right: 50px;
 }
 
-.dropdown-menu {
-    background-color: rgba(215, 231, 245, 0.93); /* Fondo blanco con opacidad */
-    
-}
-
-.dropdown-item:hover {
-    background-color: rgba(169, 198, 223, 0.93); /* Color de fondo al pasar el mouse */
-    color: white; /* Color del texto al pasar el mouse */
-}
-
-.buscador {
-    width: 400px;
-}
-/* Estilos personalizados */
-.hero-container {
-    background: rgba(255, 255, 255, 0.85);
-    /* Fondo semitransparente */
-    padding: 50px 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: auto;
-    text-align: center;
-}
-
-.navbar-nav .nav-item .nav-link {
-    font-size: 1.25rem;
-    /* Mantener la consistencia en el tamaño de la fuente */
-}
-
-/* Contenedor buscador */
-.contenedor-buscador {
-    padding-left: 0;
-}
-
-/* Items del navbar */
+/* Estilos de los elementos del Navbar */
 .navbar-nav .nav-item .nav-link {
     font-size: 1.25rem;
     padding: 10px 15px;
@@ -113,6 +87,45 @@ body {
 
 .navbar-nav .nav-item .nav-link:hover {
     transform: translateY(-2px);
+}
+
+/* Estilos del dropdown */
+.dropdown-menu {
+    background-color: rgba(215, 231, 245, 0.93); /* Fondo blanco con opacidad */
+}
+
+.dropdown-item:hover {
+    background-color: rgba(169, 198, 223, 0.93); /* Color de fondo al pasar el mouse */
+    color: white; /* Color del texto al pasar el mouse */
+}
+
+/* Estilo para el buscador */
+.buscador {
+    width: 400px;
+}
+
+/* Estilo para el contenedor del usuario */
+#user-dropdown .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;  /* Espacio entre elementos */
+}
+
+/* Estilo para la imagen de perfil */
+#user-profile-img {
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    order: 2;  /* Coloca la imagen después del texto */
+}
+
+/* Estilo para el nombre de usuario */
+#user-name {
+    order: 1;  /* Coloca el texto primero */
+}
+
+/* Oculta la flecha del dropdown */
+.navbar .dropdown-toggle::after {
+    display: none !important;
 }
 
 /* Estilos para móvil */
@@ -183,4 +196,3 @@ body {
       width: 100%;
     }
   }
-

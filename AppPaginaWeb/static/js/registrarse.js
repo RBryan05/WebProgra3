@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const negocioUrl = script.getAttribute("data-url-negocio");
     const redirectNegocio = script.getAttribute("data-redirect-negocio");
     const redirectUsuario = script.getAttribute("data-redirect-usuario");
-    
+
     const form = document.getElementById("register-form");
 
     form.addEventListener("submit", async function (event) {
@@ -49,8 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 errorBox.textContent = "";
 
                 // Guardar en localStorage
-                localStorage.setItem("usuario", JSON.stringify(data));
-                localStorage.setItem("usuarioLogeado", data.nombre_usuario);
+                localStorage.setItem("usuario", JSON.stringify({
+                    id: encontrado.id,
+                    nombre_usuario: encontrado.nombre_usuario,
+                    nombre: encontrado.nombre,
+                    direccion: encontrado.direccion,
+                    telefono: encontrado.telefono,
+                    descripcion: encontrado.descripcion,
+                    foto_perfil: encontrado.foto_perfil,
+                    tipo_usuario: encontrado.tipo_usuario
+                  }));
+                localStorage.setItem("usuarioLogeado", JSON.stringify({
+                    nombre_usuario: encontrado.nombre_usuario,  // Mantenemos el nombre de usuario
+                    id: encontrado.id || null,                  // Añadimos el ID
+                    foto_perfil: encontrado.foto_perfil || null, // Añadimos la imagen de perfil
+                  }));
 
                 // Redirigir según tipo de cuenta
                 if (accountType === 'negocio') {

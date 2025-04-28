@@ -36,8 +36,18 @@ Editar Producto
             </div>
 
             <div class="form-group">
-                <label for="imagen">URL de Imagen:</label>
-                <input type="url" id="imagen" name="imagen" required>
+                <label for="imagen">Imagen del prodcuto:</label>
+                <div class="input-group">
+                    <input type="file" class="form-control" id="foto" name="foto" 
+                           accept="image/jpeg,image/png">
+                    <button class="btn btn-outline-success upload-btn" type="button">
+                        <i class="bi bi-folder2-open"></i> Explorar
+                    </button>
+                    <button class="btn btn-success" id="btn-subir-aws" type="button">
+                        <i class="bi bi-cloud-upload"></i> Subir
+                    </button>
+                </div>
+                <div class="form-text">Formatos: JPG, PNG. Máx. 5MB</div>
             </div>
 
             <div class="form-group">
@@ -59,6 +69,10 @@ Editar Producto
             <button type="submit" class="submit-btn">Actualizar Producto</button>
         </form>
     </div>
+</div>
+
+<div id="urls" 
+     data-subir-imagen-url="{% url 'subir_imagen_s3' %}"></div>
 </div>
 
 <!-- Incluir el script JS -->

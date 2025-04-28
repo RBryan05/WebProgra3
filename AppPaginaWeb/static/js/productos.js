@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
 
+    const infoProdcutos = document.getElementById('urls').getAttribute('data-mi-perfil');
+
     // Función para formatear fechas
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -39,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <p class="price">$${producto.precio}</p>
                 <p><strong>Publicado por:</strong> ${negocioName}</p>
                 <p>Publicado el ${formatDate(producto.creado_en)}</p>
-                <button>Agregar a Favoritos</button>
+                <button onclick="location.href='${infoProdcutos}';">Más información</button>
             `;
 
             productGrid.appendChild(productCard);

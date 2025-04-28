@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Elementos del DOM
     const productGrid = document.getElementById('product-grid');
+    const infoProdcutos = document.getElementById('urls').getAttribute('data-mi-perfil');
     titulo = document.getElementById('title');
     titulo.innerHTML = "Productos de la Categoria " + localStorage.getItem('nombreCategoria') || "Productos de la categoría";
     // Función para formatear fechas
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <p>${producto.descripcion}</p>
                 <p class="price">$${producto.precio}</p>
                 <p>Publicado el ${formatDate(producto.creado_en)}</p>
-                <button class="favorite-btn">Agregar a Favoritos</button>
+                <button class="favorite-btn" onclick="location.href='${infoProdcutos}';">Más información</button>
             `;
             productGrid.appendChild(productCard);
         });

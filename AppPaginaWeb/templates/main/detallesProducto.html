@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Información del Producto - {{ block.super }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_infoProducto.css' %}">
+<main class="producto-container">
+  <!-- Encabezado con foto e información -->
+  <h2 class="title">Información del Producto</h2>
+  <div class="producto-header">
+    <!-- Foto del producto -->
+    <div class="producto-imagen">
+      <img src="{% static 'img/default_product.webp' %}" alt="Imagen del producto" id="fotoProducto" loading="lazy">
+    </div>
+    
+    <!-- Información del producto y negocio -->
+    <div class="producto-info">
+      <!-- Información del producto -->
+      <article class="info-section">
+        <h1 class="producto-title" id="nombreProducto">Nombre del Producto</h1>
+        <p class="precio-producto" id="precioProducto">$00.00</p>
+        <p class="descripcion-producto" id="descripcionProducto">Descripción del producto...</p>
+      </article>
+      
+      <!-- Información del negocio -->
+      <article class="info-section negocio-info">
+        <h2>Información del Negocio</h2>
+        <p class="negocio-dato nombre-negocio" id="nombreNegocio">Nombre del Negocio</p>
+        <p class="negocio-dato direccion-negocio" id="direccionNegocio">Dirección del negocio</p>
+        <p class="negocio-dato telefono-negocio" id="telefonoNegocio">Teléfono de contacto</p>
+      </article>
+    </div>
+  </div>
+  
+  <!-- Sección de comentarios -->
+  <section class="comentarios-section">
+    <h2>Comentarios</h2>
+    <div class="comentarios-lista" id="comentariosLista">
+      <!-- Comentarios se cargarán aquí -->
+      <div class="comentario-item">
+        <p class="autor">Usuario Ejemplo</p>
+        <p>Este es un comentario de ejemplo sobre el producto.</p>
+      </div>
+    </div>
+    
+    <form class="comentario-formulario" id="formComentario">
+      <label for="nuevoComentario" class="visually-hidden">Escribe tu comentario</label>
+      <textarea id="nuevoComentario" placeholder="Escribe tu comentario sobre este producto..." required></textarea>
+      <button type="submit" class="btn btn-comentario">Enviar Comentario</button>
+    </form>
+  </section>
+</main>
+
+<!-- Datos estáticos para JS -->
+<div id="static-data" 
+     data-default-profile="{% static 'img/default_product.webp' %}"
+     aria-hidden="true">
+</div>
+
+{% endblock %}

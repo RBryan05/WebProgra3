@@ -83,23 +83,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         htmlInfo += `<p><i class="bi bi-person-badge-fill me-2 text-primary"></i><strong>Tipo de usuario:</strong> ${tipoUsuarioCapitalice}</p>`;
         elements.infoExtra.innerHTML = htmlInfo;
     }
-    
-
-    // Event Listeners
-    if (elements.verFavoritosBtn) {
-        elements.verFavoritosBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            window.location.href = "/productos/favoritos/";
-        });
-    }
-
-    if (elements.editarPerfilBtn) {
-        elements.editarPerfilBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            // Aquí puedes agregar la lógica para editar el perfil
-        });
-    }
-
     // Iniciar carga del perfil
     cargarPerfil();
 });

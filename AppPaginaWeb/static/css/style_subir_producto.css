@@ -124,3 +124,33 @@ body {
     background-color: #0056b3;
     transform: scale(1.1);
 }
+
+.upload-btn {
+    position: relative;
+    overflow: hidden;
+}
+.upload-btn input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Ocultar el texto predeterminado y el botón nativo */
+input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+    margin-left: -175px;
+}
+input[type="file"]::file-selector-button {
+    visibility: hidden;
+}
+
+/* Botones - altura fija idéntica al input */
+.upload-btn, 
+#btn-subir-aws {
+    margin-top: 5px;
+    height: 46px; /* Misma altura que el input */
+}

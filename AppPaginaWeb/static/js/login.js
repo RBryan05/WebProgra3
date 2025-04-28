@@ -37,8 +37,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const encontrado = lista.find(item => item.nombre_usuario === username);
 
         if (encontrado && encontrado.password === password) {
-          localStorage.setItem("usuario", JSON.stringify(encontrado));
-          localStorage.setItem("usuarioLogeado", encontrado.nombre_usuario);
+          localStorage.setItem("usuario", JSON.stringify({
+            id: encontrado.id,
+            nombre_usuario: encontrado.nombre_usuario,
+            nombre: encontrado.nombre,
+            direccion: encontrado.direccion,
+            telefono: encontrado.telefono,
+            descripcion: encontrado.descripcion,
+            foto_perfil: encontrado.foto_perfil,
+            tipo_usuario: encontrado.tipo_usuario
+          }));
+          localStorage.setItem("usuarioLogeado", JSON.stringify({
+            nombre_usuario: encontrado.nombre_usuario,  // Mantenemos el nombre de usuario
+            id: encontrado.id || null,                  // Añadimos el ID
+            foto_perfil: encontrado.foto_perfil || null, // Añadimos la imagen de perfil          
+          }));
           window.location.href = accountType === "usuario" ? redirectUsuario : redirectNegocio;
         } else {
           mostrarError("Usuario o contraseña incorrectos.");

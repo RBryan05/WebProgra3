@@ -17,6 +17,14 @@ def obtener_datos(tipo):
     response = requests.get(url)
     return response.json() if response.status_code == 200 else None
 
+def obtener_dato(tipo, item_id):
+    url = f"{BASE_URL}{ENDPOINTS[tipo]}{item_id}/"
+    try:
+        response = requests.get(url, timeout=10)
+        return response.json() if response.status_code == 200 else None
+    except requests.exceptions.RequestException:
+        return None
+
 # Función para crear datos
 def crear_dato(tipo, data):
     url = f"{BASE_URL}{ENDPOINTS[tipo]}"
@@ -49,8 +57,32 @@ def crear_dato(tipo, data):
 # Función para actualizar datos
 def actualizar_dato(tipo, item_id, data):
     url = f"{BASE_URL}{ENDPOINTS[tipo]}{item_id}/"
-    response = requests.put(url, json=data)
-    return response.json() if response.status_code == 200 else None
+    
+    try:
+        # 1. Filtrar solo campos con valor y convertir "" a None
+        payload = {k: v for k, v in data.items() if v is not None}
+        
+        # 2. Log para depuración (¡IMPORTANTE!)
+        print(f"Enviando a API externa: URL={url}, Data={payload}")
+        
+        # 3. Configurar timeout y headers
+        response = requests.put(
+            url,
+            json=payload,
+            headers={'Content-Type': 'application/json'},
+            timeout=10  # 10 segundos máximo
+        )
+        
+        # 4. Verificar respuesta
+        if response.status_code in [200, 201]:
+            return response.json()
+        else:
+            print(f"Error API: Status={response.status_code}, Response={response.text}")
+            return None
+            
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión: {str(e)}")
+        return None
 
 # Función para eliminar datos
 def eliminar_dato(tipo, item_id):

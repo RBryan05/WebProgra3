@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const defaultImageUrl = staticFiles.getAttribute('data-default-image');
     const editProductUrl = staticFiles.getAttribute('data-edit-url');
 
+    console.log(defaultImageUrl);
+
     // Función para formatear la fecha
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };

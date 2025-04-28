@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .api import obtener_datos, crear_dato, actualizar_dato, eliminar_dato
-from django.db import IntegrityError
+from .api import obtener_datos, obtener_dato, crear_dato, actualizar_dato, eliminar_dato
+from django.core.files.storage import default_storage
+from datetime import datetime
+import os
 
 def main_negocio(request):
     return render(request, 'main/index.html')
@@ -41,6 +43,14 @@ def info_negocio(request):
     return render(request, 'main/informacionNegocio.html', {
         'activar_buscador': True,
     })
+
+def editar_negocio(request):
+    return render(request, 'main/editarPerfil.html', {
+        'mi_perfil': True
+    })
+
+def info_producto(request):
+    return render(request, 'main/detallesProducto.html')
 
 # Listar usuarios
 def listar_usuarios(request):
@@ -83,9 +93,26 @@ def registrar_usuario(request):
 @csrf_exempt
 def actualizar_usuario(request, usuario_id):
     if request.method == "PUT":
-        data = json.loads(request.body)
-        usuario_actualizado = actualizar_dato("usuarios", usuario_id, data)
-        return JsonResponse(usuario_actualizado, safe=False)
+        try:
+            # 1. Obtener datos actuales del usuario
+            usuario_actual = obtener_dato("usuarios", usuario_id)  # Necesitarás implementar esta función
+            if not usuario_actual:
+                return JsonResponse({'error': 'Usuario no encontrado'}, status=404)
+            
+            # 2. Combinar con nuevos datos
+            nuevos_datos = json.loads(request.body)
+            datos_completos = {**usuario_actual, **nuevos_datos}  # Fusiona ambos diccionarios
+            
+            # 3. Actualizar en API externa
+            resultado = actualizar_dato("usuarios", usuario_id, datos_completos)
+            
+            if resultado:
+                return JsonResponse(resultado)
+            return JsonResponse({'error': 'Error en API externa'}, status=502)
+            
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 # Eliminar usuario
 @csrf_exempt
@@ -128,13 +155,29 @@ def registrar_negocio(request):
         else:
             return JsonResponse({"error": negocio_creado["error"]}, status=400)
 
-# Actualizar negocio
 @csrf_exempt
 def actualizar_negocio(request, negocio_id):
     if request.method == "PUT":
-        data = json.loads(request.body)
-        negocio_actualizado = actualizar_dato("negocios", negocio_id, data)
-        return JsonResponse(negocio_actualizado, safe=False)
+        try:
+            # 1. Obtener datos actuales del negocio
+            negocio_actual = obtener_dato("negocios", negocio_id)  # Necesitarás implementar esta función
+            if not negocio_actual:
+                return JsonResponse({'error': 'Negocio no encontrado'}, status=404)
+            
+            # 2. Combinar con nuevos datos
+            nuevos_datos = json.loads(request.body)
+            datos_completos = {**negocio_actual, **nuevos_datos}  # Fusiona ambos diccionarios
+            
+            # 3. Actualizar en API externa
+            resultado = actualizar_dato("negocios", negocio_id, datos_completos)
+            
+            if resultado:
+                return JsonResponse(resultado)
+            return JsonResponse({'error': 'Error en API externa'}, status=502)
+            
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 # Eliminar negocio
 @csrf_exempt
@@ -302,3 +345,119 @@ def eliminar_respuesta(request, respuesta_id):
     if request.method == "DELETE":
         resultado = eliminar_dato("respuestas", respuesta_id)
         return JsonResponse({"eliminado": resultado}, safe=False)
+
+import boto3
+from botocore.exceptions import ClientError
+from django.conf import settings
+
+@csrf_exempt
+def upload_to_s3(request):
+    if request.method == 'POST' and request.FILES.get('imagen'):
+        imagen = request.FILES['imagen']
+        
+        # Configura cliente S3
+        s3 = boto3.client('s3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME)
+        
+        # Genera nombre único
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        extension = os.path.splitext(imagen.name)[1].lower()
+        nombre_archivo = f"uploads/{timestamp}{extension}"
+        
+        try:
+            # Sube el archivo sin ACL
+            s3.upload_fileobj(
+                imagen,
+                settings.AWS_STORAGE_BUCKET_NAME,
+                nombre_archivo,
+                ExtraArgs={
+                    'ContentType': imagen.content_type,
+                    # Nota: No incluir 'ACL' aquí
+                }
+            )
+            
+            # Verifica que el archivo existe
+            s3.head_object(
+                Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                Key=nombre_archivo
+            )
+            
+            url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{nombre_archivo}"
+            
+            return JsonResponse({
+                'success': True,
+                'url': url,
+                'path': nombre_archivo
+            })
+            
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            error_msg = e.response['Error']['Message']
+            return JsonResponse({
+                'error': f"Error de AWS ({error_code}): {error_msg}"
+            }, status=500)
+        except Exception as e:
+            return JsonResponse({
+                'error': f"Error inesperado: {str(e)}"
+            }, status=500)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=400)
+
+@csrf_exempt
+def delete_from_s3(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        image_url = data.get('image_url')
+        
+        if not image_url:
+            return JsonResponse({'error': 'URL de imagen no proporcionada'}, status=400)
+        
+        # Extraer el path/key del bucket desde la URL completa
+        try:
+            # Asumiendo que tu URL es como: https://tudominio.s3.region.amazonaws.com/path/to/file.jpg
+            bucket_domain = f"{settings.AWS_S3_CUSTOM_DOMAIN}/"
+            key = image_url.split(bucket_domain)[1]
+        except IndexError:
+            return JsonResponse({'error': 'URL de imagen no válida'}, status=400)
+        
+        # Configurar cliente S3
+        s3 = boto3.client('s3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME)
+        
+        try:
+            # Verificar que el archivo existe antes de eliminarlo
+            s3.head_object(
+                Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                Key=key
+            )
+            
+            # Eliminar el archivo
+            s3.delete_object(
+                Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                Key=key
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Imagen eliminada correctamente'
+            })
+            
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            if error_code == '404':
+                return JsonResponse({
+                    'error': 'La imagen no existe en el bucket'
+                }, status=404)
+            return JsonResponse({
+                'error': f"Error de AWS ({error_code}): {e.response['Error']['Message']}"
+            }, status=500)
+        except Exception as e:
+            return JsonResponse({
+                'error': f"Error inesperado: {str(e)}"
+            }, status=500)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=400)

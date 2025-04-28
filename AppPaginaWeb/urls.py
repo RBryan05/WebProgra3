@@ -14,6 +14,11 @@ urlpatterns = [
     path('negocios/', views.negocios, name='negocios'),
     path('negocios/infonegocio/', views.info_negocio, name='info_negocio'),
     path('categoriaproductos/', views.productos_categoria, name='categoriaproductos'),
+    path('editar_perfil/', views.editar_negocio, name='editar_negocio'),
+    path('subir-imagen/', views.upload_to_s3, name='subir_imagen_s3'),
+    path('actualizar_negocio/<int:negocio_id>/', actualizar_negocio, name='actualizar_negocio'),
+    path('borrar-imagen/', views.delete_from_s3, name='delete_from_s3'),
+    path('informacion_producto/', views.info_producto, name='informacion_producto'),
 
     # Usuarios
     path('usuarios/', listar_usuarios, name='listar_usuarios'),
@@ -22,7 +27,7 @@ urlpatterns = [
     path('usuarios/eliminar/<int:usuario_id>/', eliminar_usuario, name='eliminar_usuario'),
     path('api/usuarios/<str:username>/', views.obtener_usuario_por_username, name='obtener_usuario'),
     path('mi_perfil/negocios/<str:username>/', views.obtener_negocio_por_username, name='obtener_negocio'),
-    path('mi_perfil/usuario/<str:username>/', views.obtener_usuario_por_username, name='obtener_usuario'),
+    path('editar_perfil/usuario/<str:username>/', views.obtener_negocio_por_username, name='obtener_usuario_por_username'),
 
 
     # Negocios
@@ -30,7 +35,6 @@ urlpatterns = [
     path('negocios/listanegocios/', listar_negocios, name='listar_negocios_listado'),
     path('mis_productos/negocios/', listar_negocios, name='listar_negocios'),
     path('negocios/crear/', registrar_negocio, name='registrar_negocio'),
-    path('negocios/actualizar/<int:negocio_id>/', actualizar_negocio, name='actualizar_negocio'),
     path('negocios/eliminar/<int:negocio_id>/', eliminar_negocio, name='eliminar_negocio'),
     path('api/negocios/<str:username>/', views.obtener_negocio_por_username, name='obtener_negocio'),
     path('negocios/infonegocio/<int:id>/', views.obtener_negocio_por_id, name='obtener_negocio_id'),

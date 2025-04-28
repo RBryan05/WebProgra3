@@ -33,10 +33,19 @@ Subir Producto
                 <label for="descripcion">Descripción:</label>
                 <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
             </div>
-
             <div class="form-group">
-                <label for="imagen">URL de Imagen:</label>
-                <input type="url" id="imagen" name="imagen" required>
+                <label for="imagen">Imagen del prodcuto:</label>
+                <div class="input-group">
+                    <input type="file" class="form-control" id="foto" name="foto" 
+                           accept="image/jpeg,image/png" required>
+                    <button class="btn btn-outline-success upload-btn" type="button">
+                        <i class="bi bi-folder2-open"></i> Explorar
+                    </button>
+                    <button class="btn btn-success" id="btn-subir-aws" type="button">
+                        <i class="bi bi-cloud-upload"></i> Subir
+                    </button>
+                </div>
+                <div class="form-text">Formatos: JPG, PNG. Máx. 5MB</div>
             </div>
 
             <div class="form-group">
@@ -60,77 +69,11 @@ Subir Producto
     </div>
 </div>
 
-<script>
-    // Obtener usuario del localStorage
-    const user = JSON.parse(localStorage.getItem("usuario"));
-    const id_usuario = user.id;
-
-    // Llenar el select de categorías con las categorías obtenidas
-    fetch("categorias/" + id_usuario + "/")
-        .then(response => response.json())
-        .then(data => {
-            const selectCategoria = document.getElementById('categoria');
-            selectCategoria.innerHTML = '<option value="" disabled selected>Selecciona una categoría</option>';  // Limpiar el select
-
-            // Recorrer todas las categorías y agregar opciones al select
-            data.forEach(categoria => {
-                const option = document.createElement("option");
-                option.value = categoria.id;
-                option.textContent = categoria.nombre;
-                selectCategoria.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error("Error al obtener las categorías:", error);
-        });
-
-    // Manejar el envío del formulario
-    const form = document.getElementById('productoForm');
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();  // Evitar que el formulario se envíe de manera tradicional
-
-        // Recoger los datos del formulario
-        const nombre = document.getElementById('nombre').value;
-        const precio = document.getElementById('precio').value;
-        const descripcion = document.getElementById('descripcion').value;
-        const imagen = document.getElementById('imagen').value;
-        const estado = document.getElementById('estado').value;
-        const categoria = document.getElementById('categoria').value;
-
-        // Crear un objeto con los datos del producto
-        const producto = {
-            nombre: nombre,
-            precio: precio,
-            descripcion: descripcion,
-            imagen_url: imagen,
-            estado: estado,
-            categoria_id: categoria,
-            negocio_id: id_usuario  // El negocio_id es el id del usuario
-        };
-
-        // Enviar los datos al servidor usando fetch
-        fetch("{% url 'registrar_producto' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify(producto)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert("Error al registrar el producto: " + data.error);
-                } else {
-                    alert("Producto registrado exitosamente.");
-                    form.reset();  // Resetear el formulario
-                }
-            })
-            .catch(error => {
-                console.error("Error al registrar el producto:", error);
-                alert("Hubo un error al registrar el producto.");
-            });
-    });
-</script>
-
+<div id="urls" 
+     data-subir-imagen-url="{% url 'subir_imagen_s3' %}"
+     data-registrar-producto="{% url 'registrar_producto' %}"
+     data-obtener-categorias="categorias/">
+</div>
+<!-- Incluimos el archivo JavaScript externo -->
+<script src="{% static 'js/subir_producto.js' %}"></script>
 {% endblock %}
