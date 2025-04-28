@@ -49,4 +49,44 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = logoutBtn.dataset.logoutUrl;
         });
     }
+
+    // Obtener elementos del DOM
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    const navbar = document.querySelector('.navbar');
+    
+    // Función para cerrar el navbar
+    function closeNavbar() {
+        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+        if (bsCollapse && navbarCollapse.classList.contains('show')) {
+            bsCollapse.hide();
+        }
+    }
+    
+    // Evento click en el toggler
+    navbarToggler.addEventListener('click', function() {
+        // Bootstrap ya maneja la lógica de toggle
+    });
+    
+    // Cerrar al hacer click fuera del navbar
+    document.addEventListener('click', function(event) {
+        const isClickInsideNavbar = navbar.contains(event.target);
+        const isClickOnToggler = navbarToggler.contains(event.target);
+        
+        if (!isClickInsideNavbar && !isClickOnToggler) {
+            closeNavbar();
+        }
+    });
+    
+    // Cerrar al hacer scroll (opcional)
+    window.addEventListener('scroll', function() {
+        closeNavbar();
+    });
+    
+    // Cerrar al cambiar el tamaño de la ventana (opcional)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1400) { // Ajusta este valor según tu breakpoint
+            closeNavbar();
+        }
+    });
 });

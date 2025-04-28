@@ -10,22 +10,22 @@ document.addEventListener('DOMContentLoaded', async function () {
     const fotoPerfil = document.getElementById('foto-perfil');
     const btnSubirAWS = document.getElementById('btn-subir-aws');
     const nombre = document.getElementById('nombre');
-    const direccion = document.getElementById('direccion');
-    const telefono = document.getElementById('telefono');
-    const descripcion = document.getElementById('descripcion');
     const nombreUsuario = document.getElementById('nombre-usuario');
     const urlsDiv = document.getElementById('urls');
     const form = document.getElementById('form-editar-perfil');
     const uploadBtn = document.querySelector('.upload-btn');
     const submitBtn = document.getElementById('submit-btn');
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btn-text');
 
     // URLs y configuraciones
     const imagenDefecto = urlsDiv.dataset.imagenDefecto;
     const loginRedirect = document.getElementById('login').dataset.loginRedirect;
-    const miPerfilUrl = document.getElementById('urls').dataset.miPerfil;
+    const miPerfilUrl = urlsDiv.dataset.miPerfil;
     const urlBaseUsuario = urlsDiv.dataset.obtenerUsuario;
     const subirImagenUrl = urlsDiv.dataset.subirImagenUrl;
-    const actualizarNegocioUrl = `/actualizar_negocio/${JSON.parse(localStorage.getItem('usuarioLogeado')).id}/`;
+    const usuarioLogeado = JSON.parse(localStorage.getItem('usuarioLogeado'));
+    const actualizarPerfilUrl = `/actualizar_usuario/${usuarioLogeado?.id}/`;
 
     // Función para actualizar estado del botón de subida
     function actualizarEstadoBotonSubir() {
@@ -74,9 +74,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // Llenar campos del formulario
             nombre.value = usuario.nombre || '';
-            direccion.value = usuario.direccion || '';
-            telefono.value = usuario.telefono || '';
-            descripcion.value = usuario.descripcion || '';
             fotoPerfil.src = usuario.foto_perfil || imagenDefecto;
             nombreUsuario.textContent = `@${usuario.nombre_usuario || 'usuario'}`;
 
@@ -118,6 +115,31 @@ document.addEventListener('DOMContentLoaded', async function () {
                 throw new Error(data.error || 'Error al subir la imagen');
             }
 
+            urlImagen = data.url;
+
+            // 3. Preparar datos para enviar
+            const payload = {
+                nombre: nombre.value,
+                foto_perfil: urlImagen || fotoPerfil.src
+            };
+            const updateResponse = await fetch(actualizarPerfilUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!updateResponse.ok) {
+                const errorData = await updateResponse.json().catch(() => ({}));
+                console.error('Error detallado:', {
+                    status: updateResponse.status,
+                    error: errorData.error || 'Error desconocido'
+                });
+                throw new Error(errorData.error || `Error ${updateResponse.status}`);
+            }
+
             fotoPerfil.src = data.url;
             localStorage.setItem('imagenPerfil', data.url);
             urlImagen = data.url;
@@ -132,30 +154,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 showConfirmButton: false
             });
 
-            const payload = {
-                nombre: nombre.value,
-                direccion: direccion.value,
-                telefono: telefono.value,
-                descripcion: descripcion.value,
-                foto_perfil: urlImagen || fotoPerfil.src
-            };
-
-            // 4. Enviar solicitud de actualización
-            const updateResponse = await fetch(actualizarNegocioUrl, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!updateResponse.ok) {
-                const error = await updateResponse.json().catch(() => ({}));
-                throw new Error(error.error || `Error ${updateResponse.status}`);
+            // Eliminar la imagen anterior si existe y es diferente a la predeterminada
+            if (fotoOriginal && fotoOriginal !== imagenDefecto && fotoOriginal !== data.url) {
+                await eliminarImagenAWS(fotoOriginal);
             }
-
-            eliminarImagenAWS(fotoOriginal)
 
         } catch (error) {
             console.error('Error:', error);
@@ -189,109 +191,131 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!response.ok) {
                 throw new Error(data.error || 'Error al eliminar la imagen');
             }
-
+            await cargarDatosUsuario();
             return true;
         } catch (error) {
+            console.error('Error al eliminar imagen:', error);
             return false;
         }
     }
 
-    // Función para actualizar el negocio
-    async function actualizarPerfil(event) {
-        event.preventDefault();
+    // Función para actualizar el perfil
+async function actualizarPerfil(event) {
+    event.preventDefault();
 
-        if (!submitBtn) return;
+    if (!submitBtn) return;
 
-        const originalText = submitBtn.innerHTML;
+    const originalText = btnText.textContent;
+    
+    try {
+        submitBtn.disabled = true;
+        btnText.textContent = 'Guardando...';
+        spinner.classList.remove('d-none');
 
-        try {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Guardando...`;
+        // 1. Obtener usuario actual
+        const usuario = JSON.parse(localStorage.getItem('usuarioLogeado'));
+        if (!usuario?.id) throw new Error('Usuario no identificado');
 
-            // 1. Obtener usuario actual
-            const usuario = JSON.parse(localStorage.getItem('usuarioLogeado'));
-            if (!usuario?.id) throw new Error('Usuario no identificado');
-
-            // 2. Verificar imagen seleccionada pero no subida
-            if (fotoInput.files?.length && !imagenSubida) {
-                const confirmacion = await Swal.fire({
-                    icon: 'warning',
-                    title: 'Imagen no subida',
-                    html: 'Has seleccionado una nueva imagen pero no la has subido.<br><br>¿Deseas subirla ahora?',
-                    showDenyButton: true,
-                    confirmButtonText: 'Subir imagen',
-                    denyButtonText: 'Continuar sin subir',
-                    reverseButtons: true
-                });
-
-                if (confirmacion.isConfirmed) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
-                    btnSubirAWS.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    btnSubirAWS.focus();
-                    return;
-                }
-            }
-
-            // 3. Preparar datos para enviar
-            const payload = {
-                nombre: nombre.value,
-                direccion: direccion.value,
-                telefono: telefono.value,
-                descripcion: descripcion.value,
-                foto_perfil: urlImagen || fotoPerfil.src
-            };
-
-            // 4. Enviar solicitud de actualización
-            const updateResponse = await fetch(actualizarNegocioUrl, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify(payload)
+        // 2. Determinar qué foto usar:
+        // - Si hay imagen subida: usar la nueva URL
+        // - Si hay archivo seleccionado pero no subido: mantener la original
+        // - Si no hay archivo seleccionado: mantener la original
+        let fotoParaGuardar = fotoOriginal; // Por defecto, mantener la original
+        
+        if (imagenSubida) {
+            fotoParaGuardar = urlImagen; // Usar la nueva imagen subida
+        } else if (fotoInput.files?.length) {
+            // Hay archivo seleccionado pero no subido - mostrar advertencia
+            const confirmacion = await Swal.fire({
+                icon: 'warning',
+                title: 'Imagen no subida',
+                html: 'Has seleccionado una imagen pero no la has subido. ¿Qué deseas hacer?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Subir ahora',
+                denyButtonText: 'Mantener foto actual',
+                cancelButtonText: 'Cancelar'
             });
 
-            if (!updateResponse.ok) {
-                const error = await updateResponse.json().catch(() => ({}));
-                throw new Error(error.error || `Error ${updateResponse.status}`);
-            }
-
-            const data = await updateResponse.json();
-
-            Swal.fire({
-                icon: 'success',
-                title: '¡Perfil actualizado!',
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            // Recargar datos después de actualizar
-            await cargarDatosUsuario();
-            window.location.href = miPerfilUrl;
-
-        } catch (error) {
-            console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.message || 'Error al guardar cambios',
-                timer: 2000,
-                showConfirmButton: false
-            });
-        } finally {
-            if (submitBtn) {
+            if (confirmacion.isConfirmed) {
+                // Subir la imagen primero
+                await subirImagenAWS();
+                fotoParaGuardar = urlImagen;
+            } else if (confirmacion.isDenied) {
+                // Mantener la foto actual
+                fotoParaGuardar = fotoOriginal;
+            } else {
+                // Cancelar la operación
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
+                btnText.textContent = originalText;
+                spinner.classList.add('d-none');
+                return;
             }
         }
-    }
 
-    // Helper para CSRF Token
-    function getCSRFToken() {
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-        return csrfToken ? csrfToken.value : '';
+        // 3. Preparar datos para enviar
+        const payload = {
+            nombre: nombre.value,
+            foto_perfil: fotoParaGuardar
+        };
+
+        // 4. Enviar solicitud de actualización
+        const updateResponse = await fetch(actualizarPerfilUrl, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!updateResponse.ok) {
+            const error = await updateResponse.json().catch(() => ({}));
+            throw new Error(error.error || `Error ${updateResponse.status}`);
+        }
+
+        const data = await updateResponse.json();
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Perfil actualizado!',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => {
+            window.location.href = miPerfilUrl;
+        });
+
+        localStorage.setItem("usuario", JSON.stringify({
+            id: data,
+            nombre_usuario: data.nombre_usuario,
+            nombre: data.nombre,
+            foto_perfil: data.foto_perfil,
+            tipo_usuario: data.tipo_usuario
+        }));
+
+        localStorage.setItem("usuarioLogeado", JSON.stringify({
+            nombre_usuario: data.nombre_usuario,  // Mantenemos el nombre de usuario
+            id: data.id || null,                  // Añadimos el ID
+            foto_perfil: data.foto_perfil || null, // Añadimos la imagen de perfil          
+        }));
+
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Error al guardar cambios',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            btnText.textContent = originalText;
+            spinner.classList.add('d-none');
+        }
     }
+}
 
     // Event Listeners
     if (btnSubirAWS) {

@@ -22,7 +22,7 @@
                     <!-- Información del usuario se insertará aquí -->
                 </div>
                 <div class="text-center mt-4">
-                    <a href="{% url 'editar_negocio' %}" class="btn btn-outline-primary px-4 py-2" id="editar-perfil">
+                    <a href="" class="btn btn-outline-primary px-4 py-2" id="editar-perfil">
                         <i class="bi bi-pencil me-2"></i>Editar Perfil
                     </a>
                 </div>
@@ -34,6 +34,11 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="urls"
+    data-editar-usuario-url="{% url 'editar_usuario' %}"
+    data-editar-negocio-url="{% url 'editar_negocio' %}">
 </div>
 
 <!-- Solo pasamos la imagen por defecto como data attribute -->

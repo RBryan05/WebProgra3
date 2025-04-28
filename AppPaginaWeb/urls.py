@@ -19,15 +19,16 @@ urlpatterns = [
     path('actualizar_negocio/<int:negocio_id>/', actualizar_negocio, name='actualizar_negocio'),
     path('borrar-imagen/', views.delete_from_s3, name='delete_from_s3'),
     path('informacion_producto/', views.info_producto, name='informacion_producto'),
+    path('editar_usuario/', views.editar_usuario, name='editar_usuario'),
 
     # Usuarios
     path('usuarios/', listar_usuarios, name='listar_usuarios'),
     path('usuarios/crear/', registrar_usuario, name='registrar_usuario'),
-    path('usuarios/actualizar/<int:usuario_id>/', actualizar_usuario, name='actualizar_usuario'),
+    path('actualizar_usuario/<int:usuario_id>/', actualizar_usuario, name='actualizar_usuario'),
     path('usuarios/eliminar/<int:usuario_id>/', eliminar_usuario, name='eliminar_usuario'),
-    path('api/usuarios/<str:username>/', views.obtener_usuario_por_username, name='obtener_usuario'),
+    path('mi_perfil/usuarios/<str:username>/', views.obtener_usuario_por_username, name='obtener_usuario'),
     path('mi_perfil/negocios/<str:username>/', views.obtener_negocio_por_username, name='obtener_negocio'),
-    path('editar_perfil/usuario/<str:username>/', views.obtener_negocio_por_username, name='obtener_usuario_por_username'),
+    path('editar_perfil/usuario/<str:username>/', views.obtener_usuario_por_username, name='obtener_usuario_por_username'),
 
 
     # Negocios

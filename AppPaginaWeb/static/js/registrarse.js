@@ -58,12 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     descripcion: encontrado.descripcion,
                     foto_perfil: encontrado.foto_perfil,
                     tipo_usuario: encontrado.tipo_usuario
-                  }));
+                }));
                 localStorage.setItem("usuarioLogeado", JSON.stringify({
                     nombre_usuario: encontrado.nombre_usuario,  // Mantenemos el nombre de usuario
                     id: encontrado.id || null,                  // Añadimos el ID
                     foto_perfil: encontrado.foto_perfil || null, // Añadimos la imagen de perfil
-                  }));
+                }));
 
                 // Redirigir según tipo de cuenta
                 if (accountType === 'negocio') {

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Variables de estado
     let imagenSubida = false;  // Cambiado a false inicialmente
     let archivoActual = null;
+    let fotoOriginal = null;
     let urlImagen = "";
     let imagenOriginal = "";
 
@@ -20,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // URLs
     const subirImagenUrl = urlsDiv.dataset.subirImagenUrl;
+    const imagenDefecto = urlsDiv.dataset.imagenDefecto;
+    cargarDatosIniciales();
 
     // Función para actualizar estado del botón de subida
     function actualizarEstadoBoton() {
@@ -77,39 +80,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const imagenFinal = imagenSubida && urlImagen ? urlImagen : imagenOriginal;
 
-        // Recoger datos del formulario
-        const producto = {
-            nombre: document.getElementById('nombre').value,
-            descripcion: document.getElementById('descripcion').value,
-            imagen_url: imagenFinal,
-            estado: document.getElementById('estado').value,
-            categoria_id: document.getElementById('categoria').value,
-            precio: parseFloat(document.getElementById('precio').value),
-            negocio_id: id_usuario
-        };
+            // Recoger datos del formulario
+            const producto = {
+                nombre: document.getElementById('nombre').value,
+                descripcion: document.getElementById('descripcion').value,
+                imagen_url: imagenFinal,
+                estado: document.getElementById('estado').value,
+                categoria_id: document.getElementById('categoria').value,
+                precio: parseFloat(document.getElementById('precio').value),
+                negocio_id: id_usuario
+            };
 
-        // Enviar actualización
-        fetch(`/editar_producto/productos/${productoId}/`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify(producto)
-        })
-            .then(async response => {
-                if (!response.ok) {
-                    const contentType = response.headers.get("content-type");
-                    if (contentType && contentType.includes("application/json")) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || "Error del servidor");
-                    } else {
-                        const text = await response.text();
-                        throw new Error(text || "Error desconocido");
-                    }
-                }
-                return response.json();
+            // Enviar actualización
+            fetch(`/editar_producto/productos/${productoId}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify(producto)
             })
+                .then(async response => {
+                    if (!response.ok) {
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.error || "Error del servidor");
+                        } else {
+                            const text = await response.text();
+                            throw new Error(text || "Error desconocido");
+                        }
+                    }
+                    return response.json();
+                })
 
             Swal.fire({
                 icon: 'success',
@@ -119,7 +122,44 @@ document.addEventListener("DOMContentLoaded", () => {
                 showConfirmButton: false
             });
 
-            eliminarImagenAWS(imagenOriginal); // Eliminar la imagen original de AWS S3
+            // Recoger datos del formulario
+            const layout = {
+                nombre: document.getElementById('nombre').value,
+                descripcion: document.getElementById('descripcion').value,
+                imagen_url: imagenFinal,
+                estado: document.getElementById('estado').value,
+                categoria_id: document.getElementById('categoria').value,
+                precio: parseFloat(document.getElementById('precio').value),
+                negocio_id: id_usuario
+            };
+
+            // Enviar actualización
+            fetch(`/editar_producto/productos/${productoId}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify(layout)
+            })
+                .then(async response => {
+                    if (!response.ok) {
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.includes("application/json")) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.error || "Error del servidor");
+                        } else {
+                            const text = await response.text();
+                            throw new Error(text || "Error desconocido");
+                        }
+                    }
+                    return response.json();
+                })
+
+            // Eliminar la imagen anterior si existe y es diferente a la predeterminada
+            if (fotoOriginal && fotoOriginal !== imagenDefecto && fotoOriginal !== data.url) {
+                await eliminarImagenAWS(fotoOriginal);
+            }
 
         } catch (error) {
             console.error('Error:', error);
@@ -150,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             const data = await response.json();
-
+            await cargarDatosIniciales();
             if (!response.ok) {
                 throw new Error(data.error || 'Error al eliminar la imagen');
             }
@@ -194,12 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 fetch("categorias/" + id_usuario + "/"),
                 fetch(`producto/id/${productoId}/`)
             ]);
-            
+
             const [categoriasData, producto] = await Promise.all([
                 categoriasResponse.json(),
                 productoResponse.json()
             ]);
-            
+
             const selectCategoria = document.getElementById('categoria');
             if (selectCategoria) {
                 // Limpiar y llenar categorías
@@ -210,18 +250,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     option.textContent = categoria.nombre;
                     selectCategoria.appendChild(option);
                 });
-                
+
                 // Establecer valores del formulario
                 document.getElementById('nombre').value = producto.nombre;
                 document.getElementById('descripcion').value = producto.descripcion;
                 document.getElementById('precio').value = parseFloat(producto.precio).toFixed(2);
                 document.getElementById('estado').value = producto.estado;
                 selectCategoria.value = producto.categoria_id; // Ahora seguro que el select está listo
-                
+
                 // Imágenes
                 urlImagen = producto.imagen_url;
+
                 imagenOriginal = producto.imagen_url;
-                
+                fotoOriginal = producto.imagen_url;
+
                 actualizarEstadoBoton();
             }
         } catch (error) {
@@ -260,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const imagenFinal = imagenSubida && urlImagen ? urlImagen : imagenOriginal;
 
             // Recoger datos del formulario
-            const producto = {
+            const layout = {
                 nombre: document.getElementById('nombre').value,
                 descripcion: document.getElementById('descripcion').value,
                 imagen_url: imagenFinal,
@@ -277,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type": "application/json",
                     "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
-                body: JSON.stringify(producto)
+                body: JSON.stringify(layout)
             })
                 .then(async response => {
                     if (!response.ok) {
@@ -325,6 +367,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Inicializar estado del botón
-    cargarDatosIniciales()
     actualizarEstadoBoton();
 });

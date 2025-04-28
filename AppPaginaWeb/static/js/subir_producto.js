@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error(data.error || 'Error al eliminar la imagen');
             }
 
-            console.log('Imagen eliminada:', imageUrl);
             return true;
         } catch (error) {
             console.error('Error al eliminar imagen:', error);
@@ -117,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
     async function subirImagenAWS() {
         if (!fotoInput.files?.length || imagenSubida || !btnSubirAWS) return;
 
-        console.log('Imagen eliminada:', imagenAnteriorSubida);
         // Antes de actualizar, eliminar la imagen anterior si existe
         if (imagenAnteriorSubida && imagenAnteriorSubida !== urlImagen) {
             await eliminarImagenAWS(imagenAnteriorSubida);
@@ -153,10 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
             archivoActual = file.name;
             urlImagen = data.url;
             imagenEliminar = data.url;
-            console.log('Imagen subida:', imagenEliminar);
             imagenAnteriorSubida = imagenEliminar; // Guarda la URL previa antes de actualizar
-
-            console.log('Imagen subida:', data.url);
 
             if (imagenInput) {
                 imagenInput.value = data.url;

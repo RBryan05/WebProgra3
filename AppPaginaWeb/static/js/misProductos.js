@@ -4,7 +4,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const defaultImageUrl = staticFiles.getAttribute('data-default-image');
     const editProductUrl = staticFiles.getAttribute('data-edit-url');
 
-    console.log(defaultImageUrl);
+    const searchInput = document.getElementById('search-input');
+
+    if (searchInput) {
+        searchInput.placeholder = "Buscar en mis Productos...";
+    }
+
+    // Variables globales para almacenar datos
+    let todosProductos = [];
+    let todosNegocios = []; // Cambié el nombre a todosNegocios para consistencia
+    let negocios = []; // Esta la mantenemos para compatibilidad con el código existente
 
     // Función para formatear la fecha
     function formatDate(dateString) {
@@ -13,98 +22,154 @@ document.addEventListener("DOMContentLoaded", () => {
         return date.toLocaleDateString('es-ES', options);
     }
 
+    // Función para normalizar texto
+    function normalizarTexto(texto) {
+        if (!texto) return '';
+        return texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/ñ/g, "n");
+    }
+
+    // Función para crear tarjeta de negocio (si la necesitas)
+    function crearTarjetaNegocio(negocio) {
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "tarjeta-negocio";
+        const imagenUrl = negocio.foto_perfil || defaultImageUrl;
+
+        tarjeta.innerHTML = `
+            <img src="${imagenUrl}" alt="Foto de ${negocio.nombre}" class="imagen-perfil">
+            <h3 class="nombre-negocio">${negocio.nombre}</h3>
+            <p class="direccion-negocio">${negocio.direccion || "Dirección no proporcionada"}</p>
+            <a href="/negocios/infonegocio/" data-id="${negocio.id}" onclick="guardarId(event)" class="mas-info">Más información</a>
+        `;
+
+        return tarjeta;
+    }
+
+    // Función para filtrar productos por nombre
+    function filtrarProductos(terminoBusqueda) {
+        if (!terminoBusqueda || terminoBusqueda.trim() === "") {
+            renderizarProductos(todosProductos);
+            return;
+        }
+
+        const terminoNormalizado = normalizarTexto(terminoBusqueda);
+
+        const productosFiltrados = todosProductos.filter(producto => {
+            const nombreNormalizado = normalizarTexto(producto.nombre);
+            return nombreNormalizado.includes(terminoNormalizado);
+        });
+
+        renderizarProductos(productosFiltrados);
+    }
+
+
+    // Función para renderizar productos
+    function renderizarProductos(productos) {
+        const productGrid = document.getElementById('product-grid');
+        productGrid.innerHTML = '';
+
+        if (productos.length === 0) {
+            productGrid.innerHTML = '<p class="no-results">No se encontraron productos que coincidan con tu búsqueda.</p>';
+            return;
+        }
+
+        productos.forEach(producto => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+
+            const negocio = negocios.find(negocio => negocio.id === producto.negocio_id);
+            const negocioName = negocio ? negocio.nombre : "Negocio desconocido";
+
+            const buttonText = producto.estado === "activo" ? "Eliminar" : "Recuperar";
+
+            productCard.innerHTML = `
+                 <img src="${producto.imagen_url || defaultImageUrl}" alt="${producto.nombre}" />
+                 <h3>${producto.nombre}</h3>
+                 <p>${producto.descripcion}</p>
+                 <p class="price">$${producto.precio}</p>
+                 <p><strong>Publicado por:</strong> ${negocioName}</p>
+                 <p>Publicado el ${formatDate(producto.creado_en)}</p>
+                 <button class="edit-btn" data-id="${producto.id}">Editar</button>
+                 <button class="delete-btn" data-id="${producto.id}">${buttonText}</button>  
+             `;
+
+            productGrid.appendChild(productCard);
+
+            // Agregar eventos a los botones
+            productCard.querySelector('.edit-btn').addEventListener('click', function () {
+                const productoId = this.getAttribute('data-id');
+                localStorage.setItem('productoId', productoId);
+                window.location.href = editProductUrl;
+            });
+
+            productCard.querySelector('.delete-btn').addEventListener('click', function () {
+                const productoId = this.getAttribute('data-id');
+                localStorage.setItem('productoId', productoId);
+                if (this.textContent === "Eliminar") {
+                    cambiarEstadoAInactivo(productoId);
+                } else {
+                    cambiarEstadoAActivo(productoId);
+                }
+            });
+        });
+    }
+
+    // Inicializar el buscador de productos
+    function inicializarBuscador() {
+        const searchForm = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
+
+        if (searchForm && searchInput) {
+            searchForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                filtrarProductos(searchInput.value.trim());
+            });
+
+            searchInput.addEventListener('input', function () {
+                filtrarProductos(this.value.trim());
+            });
+        }
+    }
+
     // Obtener el id del usuario desde el localStorage
     const usuarioId = localStorage.getItem('usuario') ? JSON.parse(localStorage.getItem('usuario')).id : null;
 
     if (!usuarioId) {
+        console.error("Usuario no identificado");
     } else {
-        // Obtener los productos y los negocios de manera simultánea
-        fetch('negocios/')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Error en la respuesta del servidor de negocios: " + response.status);
-                }
-                return response.json();  // Convertir la respuesta a JSON
+        // Obtener los negocios y productos
+        Promise.all([
+            fetch('negocios/').then(response => {
+                if (!response.ok) throw new Error("Error al cargar negocios");
+                return response.json();
+            }),
+            fetch('listadoproductos/').then(response => {
+                if (!response.ok) throw new Error("Error al cargar productos");
+                return response.json();
             })
-            .then(data => {
-                const negocios = data.negocios;
+        ])
+            .then(([negociosData, productosData]) => {
+                // Asignar los datos
+                todosNegocios = negociosData.negocios || negociosData;
+                negocios = todosNegocios; // Mantener compatibilidad
+                todosProductos = (productosData.productos || productosData)
+                    .filter(producto => producto.negocio_id === usuarioId);
 
-                // Obtener los productos
-                fetch('listadoproductos/')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Error en la respuesta del servidor de productos: " + response.status);
-                        }
-                        return response.json();  // Convertir la respuesta a JSON
-                    })
-                    .then(data => {
+                // Renderizar productos
+                renderizarProductos(todosProductos);
 
-                        const productGrid = document.getElementById('product-grid');
-
-                        if (data.productos && Array.isArray(data.productos)) {
-                            // Mostrar todos los productos que pertenecen al negocio logueado, sin importar su estado
-                            const productosDelNegocio = data.productos.filter(producto =>
-                                producto.negocio_id === usuarioId
-                            );
-
-                            productosDelNegocio.forEach(producto => {
-                                const productCard = document.createElement('div');
-                                productCard.classList.add('product-card');
-
-                                const negocio = negocios.find(negocio => negocio.id === producto.negocio_id);
-                                const negocioName = negocio ? negocio.nombre : "Negocio desconocido";
-
-                                // Definir el texto del botón y la acción según el estado
-                                const buttonText = producto.estado === "activo" ? "Eliminar" : "Recuperar";
-                                const buttonAction = producto.estado === "activo" ? cambiarEstadoAInactivo : cambiarEstadoAActivo;
-
-                                productCard.innerHTML = `
-                                    <img src="${producto.imagen_url || defaultImageUrl}" alt="${producto.nombre}" />
-                                    <h3>${producto.nombre}</h3>
-                                    <p>${producto.descripcion}</p>
-                                    <p class="price">$${producto.precio}</p>
-                                    <p><strong>Publicado por:</strong> ${negocioName}</p>
-                                    <p>Publicado el ${formatDate(producto.creado_en)}</p>
-                                    <button class="edit-btn" data-id="${producto.id}">Editar</button>
-                                    <button class="delete-btn" data-id="${producto.id}">${buttonText}</button>  
-                                `;
-
-                                productGrid.appendChild(productCard);
-                            });
-
-                            // Agregar el evento click a los botones de "Editar"
-                            const editButtons = document.querySelectorAll('.edit-btn');
-                            editButtons.forEach(button => {
-                                button.addEventListener('click', function () {
-                                    const productoId = this.getAttribute('data-id');
-                                    localStorage.setItem('productoId', productoId); // Guardar el ID del producto en localStorage
-                                    window.location.href = editProductUrl; // Redirigir a la página de edición
-                                });
-                            });
-
-                            // Agregar el evento click a los botones de "Eliminar" o "Recuperar"
-                            const deleteButtons = document.querySelectorAll('.delete-btn');
-                            deleteButtons.forEach(button => {
-                                button.addEventListener('click', function () {
-                                    const productoId = this.getAttribute('data-id');
-                                    localStorage.setItem('productoId', productoId); // Guardar el ID del producto en localStorage
-                                    // Si el botón dice "Eliminar", cambiar el estado a inactivo
-                                    if (this.textContent === "Eliminar") {
-                                        cambiarEstadoAInactivo(productoId);
-                                    }
-                                    // Si el botón dice "Recuperar", cambiar el estado a activo
-                                    else if (this.textContent === "Recuperar") {
-                                        cambiarEstadoAActivo(productoId);
-                                    }
-                                });
-                            });
-                        } else {
-                        }
-                    })
-                    .catch(error => {
-                    });
+                // Inicializar buscador
+                inicializarBuscador();
             })
             .catch(error => {
+                console.error("Error:", error);
+                const container = document.getElementById('product-grid') || document.getElementById('negocios-container');
+                if (container) {
+                    container.innerHTML = '<p class="error-message">Error al cargar los datos. Por favor, recarga la página.</p>';
+                }
             });
     }
 

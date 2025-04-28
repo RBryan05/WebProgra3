@@ -1,4 +1,8 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    // Variables globales para almacenar los datos
+    let allProducts = [];
+    let allBusinesses = [];
+
     // Configuración
     const config = {
         defaultImage: document.getElementById('app-data').getAttribute('data-default-image'),
@@ -16,6 +20,32 @@ document.addEventListener("DOMContentLoaded", function() {
         return new Date(dateString).toLocaleDateString('es-ES', options);
     }
 
+    // Función para normalizar texto (quitar tildes y convertir ñ a n)
+    function normalizarTexto(texto) {
+        return texto
+            .toLowerCase()
+            .normalize("NFD") // Descompone caracteres acentuados
+            .replace(/[\u0300-\u036f]/g, "") // Elimina diacríticos (tildes)
+            .replace(/ñ/g, "n"); // Convierte ñ a n
+    }
+
+    // Función para filtrar productos según el término de búsqueda (versión mejorada)
+    function filterProducts(searchTerm) {
+        if (!searchTerm) {
+            renderProducts(allProducts, allBusinesses);
+            return;
+        }
+
+        const terminoNormalizado = normalizarTexto(searchTerm);
+
+        const filteredProducts = allProducts.filter(producto => {
+            const nombreNormalizado = normalizarTexto(producto.nombre);
+            return nombreNormalizado.includes(terminoNormalizado);
+        });
+
+        renderProducts(filteredProducts, allBusinesses);
+    }
+
     // Función para renderizar productos
     function renderProducts(products, businesses) {
         const productGrid = document.getElementById('product-grid');
@@ -26,6 +56,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Filtrar solo productos activos
         const activeProducts = products.filter(producto => producto.estado === "activo");
+
+        // Mostrar mensaje si no hay resultados
+        if (activeProducts.length === 0) {
+            productGrid.innerHTML = '<p class="no-results">No se encontraron productos que coincidan con tu búsqueda.</p>';
+            return;
+        }
 
         // Crear tarjetas para cada producto
         activeProducts.forEach(producto => {
@@ -57,6 +93,25 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    // Función para inicializar el buscador
+    function initSearch() {
+        const searchForm = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
+
+        if (searchForm && searchInput) {
+            // Buscar al enviar el formulario
+            searchForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                filterProducts(searchInput.value.trim());
+            });
+
+            // Buscar en tiempo real mientras escribe
+            searchInput.addEventListener('input', function () {
+                filterProducts(this.value.trim());
+            });
+        }
+    }
+
     // Cargar datos de negocios y productos
     Promise.all([
         fetch(config.endpoints.negocios).then(response => {
@@ -68,13 +123,22 @@ document.addEventListener("DOMContentLoaded", function() {
             return response.json();
         })
     ])
-    .then(([negociosData, productosData]) => {
-        if (!negociosData.negocios || !productosData.productos) {
-            throw new Error('Datos incompletos recibidos del servidor');
-        }
-        renderProducts(productosData.productos, negociosData.negocios);
-    })
-    .catch(error => {
-        handleError(error, 'Error al cargar los datos:');
-    });
+        .then(([negociosData, productosData]) => {
+            if (!negociosData.negocios || !productosData.productos) {
+                throw new Error('Datos incompletos recibidos del servidor');
+            }
+
+            // Almacenar todos los productos y negocios para filtrado
+            allProducts = productosData.productos;
+            allBusinesses = negociosData.negocios;
+
+            // Renderizar todos los productos inicialmente
+            renderProducts(allProducts, allBusinesses);
+
+            // Inicializar el buscador
+            initSearch();
+        })
+        .catch(error => {
+            handleError(error, 'Error al cargar los datos:');
+        });
 });

@@ -45,7 +45,12 @@ def info_negocio(request):
     })
 
 def editar_negocio(request):
-    return render(request, 'main/editarPerfil.html', {
+    return render(request, 'main/editarNegocio.html', {
+        'mi_perfil': True
+    })
+
+def editar_usuario(request):
+    return render(request, 'main/editarUsuario.html', {
         'mi_perfil': True
     })
 
@@ -95,7 +100,7 @@ def actualizar_usuario(request, usuario_id):
     if request.method == "PUT":
         try:
             # 1. Obtener datos actuales del usuario
-            usuario_actual = obtener_dato("usuarios", usuario_id)  # Necesitarás implementar esta función
+            usuario_actual = obtener_dato("usuarios", usuario_id)
             if not usuario_actual:
                 return JsonResponse({'error': 'Usuario no encontrado'}, status=404)
             
@@ -110,6 +115,8 @@ def actualizar_usuario(request, usuario_id):
                 return JsonResponse(resultado)
             return JsonResponse({'error': 'Error en API externa'}, status=502)
             
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Datos JSON inválidos'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Método no permitido'}, status=405)

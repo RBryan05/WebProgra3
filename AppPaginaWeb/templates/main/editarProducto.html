@@ -7,9 +7,6 @@ Editar Producto
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style_subir_producto.css' %}">
-<a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'mis_productos' %}">
-    <i class="bi bi-x-lg"></i>
-</a> 
 <h2 class="title">Editar Producto</h2>
 <!-- Contenedor principal para centrar la tarjeta -->
 <div class="form-container">
@@ -72,7 +69,8 @@ Editar Producto
 </div>
 
 <div id="urls" 
-     data-subir-imagen-url="{% url 'subir_imagen_s3' %}"></div>
+     data-subir-imagen-url="{% url 'subir_imagen_s3' %}"
+     data-imagen-defecto="{% static 'img/default_product.webp' %}">
 </div>
 
 <!-- Incluir el script JS -->

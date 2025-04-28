@@ -1,14 +1,19 @@
 document.addEventListener("DOMContentLoaded", async () => {
     // Configuración inicial
     const appData = document.getElementById("app-data");
+    const urlsDiv = document.getElementById("urls");
+    const editarUsuarioUrl = urlsDiv ? urlsDiv.getAttribute("data-editar-usuario-url") : null;
+    const editarNegocioUrl = urlsDiv ? urlsDiv.getAttribute("data-editar-negocio-url") : null;
     const tipoUsuarioCapitalice = "";
     const config = {
         defaultProfileImage: appData ? appData.getAttribute('data-default-image') : '/static/img/default_profile.avif',
         endpoints: {
             negocio: '/mi_perfil/negocios/',
-            usuario: '/mi_perfil/usuario/'
+            usuario: '/mi_perfil/usuarios/'
         }
     };
+
+    const datosUsuario = JSON.parse(localStorage.getItem('usuario'));
 
     // Elementos del DOM
     const elements = {
@@ -19,6 +24,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         verFavoritosBtn: document.getElementById("ver-favoritos"),
         editarPerfilBtn: document.getElementById("editar-perfil")
     };
+    if (datosUsuario) {
+        if (datosUsuario.tipo_usuario === "negocio") {
+            elements.editarPerfilBtn.href = editarNegocioUrl;
+        } else if (datosUsuario.tipo_usuario === "normal") {
+            elements.editarPerfilBtn.href = editarUsuarioUrl;
+        } else {
+            console.error("Tipo de usuario no reconocido.");
+        }
+    }
+
 
     // Verificar que todos los elementos existen
     if (!elements.fotoPerfil || !elements.nombreCompleto || !elements.username || !elements.infoExtra) {
@@ -40,13 +55,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function cargarPerfil() {
         try {
             const { nombre_usuario: username, tipo_usuario: tipoUsuario } = userData;
-            const apiUrl = tipoUsuario === "negocio" 
+            const apiUrl = tipoUsuario === "negocio"
                 ? `${config.endpoints.negocio}${username}/`
                 : `${config.endpoints.usuario}${username}/`;
 
             const response = await fetch(apiUrl);
             if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-            
+
             const data = await response.json();
             mostrarDatosPerfil(data, tipoUsuario);
         } catch (error) {
@@ -63,11 +78,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         elements.nombreCompleto.textContent = data.nombre || "Sin nombre";
         elements.username.textContent = `@${data.nombre_usuario}`;
         elements.fotoPerfil.src = data.foto_perfil || config.defaultProfileImage;
-    
+
         // Información adicional según tipo de usuario
         let htmlInfo = '';
         let tipoUsuarioCapitalice = '';
-    
+
         if (tipoUsuario === "negocio") {
             htmlInfo += `
                 <p><i class="bi bi-shop me-2 text-primary"></i><strong>Nombre comercial:</strong> ${data.nombre}</p>
@@ -79,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             htmlInfo += `<p><i class="bi bi-person-fill me-2 text-primary"></i><strong>Nombre:</strong> ${data.nombre}</p>`;
             tipoUsuarioCapitalice = "Usuario";
         }
-    
+
         htmlInfo += `<p><i class="bi bi-person-badge-fill me-2 text-primary"></i><strong>Tipo de usuario:</strong> ${tipoUsuarioCapitalice}</p>`;
         elements.infoExtra.innerHTML = htmlInfo;
     }
