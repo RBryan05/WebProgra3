@@ -21,8 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 searchInput.placeholder = "Buscar una Categoria de " + negocio.nombre + "...";
             }
 
-            document.getElementById("direccionNegocio").textContent = negocio.direccion || "Dirección no proporcionada";
-            document.getElementById("descripcionNegocio").textContent = negocio.descripcion || "Descripción no proporcionada";
+            document.getElementById("direccionNegocio").textContent = "Direpción: " + (negocio.direccion || "Dirección no proporcionada");
+            document.getElementById("descripcionNegocio").textContent = "Descripción: " + (negocio.descripcion || "Descripción no proporcionada");
+            document.getElementById("telefonoNegocio").textContent = "Telefono: " + (negocio.telefono || "Teléfono no proporcionado");
         } catch (error) {
             console.error("Error al obtener información del negocio:", error);
         }

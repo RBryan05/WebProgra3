@@ -1,16 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
     const script = document.getElementById("registro-script");
+    const form = document.getElementById("register-form");
 
+    // Verifica que el script y el form existan
+    if (!script || !form) {
+        console.error("Elementos esenciales no encontrados");
+        return;
+    }
+
+    // Obtener URLs desde los data attributes
     const usuarioUrl = script.getAttribute("data-url-usuario");
     const negocioUrl = script.getAttribute("data-url-negocio");
     const redirectNegocio = script.getAttribute("data-redirect-negocio");
     const redirectUsuario = script.getAttribute("data-redirect-usuario");
 
-    const form = document.getElementById("register-form");
-
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+        // Obtener valores del formulario
         const nombre = document.getElementById('name').value;
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -19,8 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         const errorBox = document.getElementById('error-message');
 
+        // Validación básica
         if (password !== confirmPassword) {
-            alert("Las contraseñas no coinciden.");
+            errorBox.textContent = "Las contraseñas no coinciden.";
             return;
         }
 
@@ -31,8 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            let url = accountType === 'negocio' ? negocioUrl : usuarioUrl;
-
+            const url = accountType === 'negocio' ? negocioUrl : usuarioUrl;
+            
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -45,37 +53,34 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             if (response.ok) {
-                alert("Usuario registrado exitosamente");
+                // Limpiar mensajes de error
                 errorBox.textContent = "";
-
-                // Guardar en localStorage
+                
+                // Guardar datos en localStorage
                 localStorage.setItem("usuario", JSON.stringify({
-                    id: encontrado.id,
-                    nombre_usuario: encontrado.nombre_usuario,
-                    nombre: encontrado.nombre,
-                    direccion: encontrado.direccion,
-                    telefono: encontrado.telefono,
-                    descripcion: encontrado.descripcion,
-                    foto_perfil: encontrado.foto_perfil,
-                    tipo_usuario: encontrado.tipo_usuario
+                    id: data.id,
+                    nombre_usuario: data.nombre_usuario,
+                    nombre: data.nombre,
+                    tipo_usuario: accountType
                 }));
+                
                 localStorage.setItem("usuarioLogeado", JSON.stringify({
-                    nombre_usuario: encontrado.nombre_usuario,  // Mantenemos el nombre de usuario
-                    id: encontrado.id || null,                  // Añadimos el ID
-                    foto_perfil: encontrado.foto_perfil || null, // Añadimos la imagen de perfil
+                    nombre_usuario: data.nombre_usuario,
+                    id: data.id,
+                    tipo_usuario: accountType
                 }));
 
-                // Redirigir según tipo de cuenta
-                if (accountType === 'negocio') {
-                    window.location.href = redirectNegocio;
-                } else if (accountType === 'usuario') {
-                    window.location.href = redirectUsuario;
-                }
+                // Redirección - IMPORTANTE: Verifica las URLs
+                console.log("Redirigiendo a:", accountType === 'negocio' ? redirectNegocio : redirectUsuario);
+                window.location.href = accountType === 'negocio' ? redirectNegocio : redirectUsuario;
+                
             } else {
+                // Mostrar error devuelto por el servidor
                 errorBox.textContent = data.error || "Error al registrar el usuario.";
             }
         } catch (error) {
-            alert("Hubo un problema al registrar el usuario.");
+            console.error("Error en el registro:", error);
+            errorBox.textContent = "Hubo un problema al conectar con el servidor.";
         }
     });
 });

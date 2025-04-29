@@ -6,10 +6,6 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/styles_infoNegocios.css' %}">
 
-<a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'negocios' %}">
-    <i class="bi bi-x-lg"></i>
-</a> 
-
 <h1 class="title"></h1> <!-- El nombre del negocio se llenará con JS -->
 
 <div class="container">
@@ -23,6 +19,7 @@
             <div class="info-detalles">
                 <p class="direccion-negocio" id="direccionNegocio"></p> <!-- Dirección se llenará con JS -->
                 <p class="descripcion-negocio" id="descripcionNegocio"></p> <!-- Descripción se llenará con JS -->
+                <p class="telefono-negocio" id="telefonoNegocio"></p> <!-- Teléfono se llenará con JS -->
             </div>
         </div>
     </div>

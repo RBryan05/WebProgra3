@@ -11,7 +11,7 @@
     <main class="d-flex align-items-center justify-content-center vh-100">
         <div class="hero-container">
             <h2 class="fw-bold text-primary">Publica Tu Producto</h2>
-            <p class="text-secondary fs-5">¿Quieres conectar más con tus clientes? - Estás en el lugar correcto.</p>
+            <p id="texto-card" class="text-secondary fs-5">¿Quieres conectar con más clientes? - Estás en el lugar correcto.</p>
             
             <!-- Aquí es donde mostrarás el nombre del usuario -->
             <div id="usuario-info">
@@ -20,7 +20,7 @@
 
             <div class="d-flex justify-content-center gap-3">
                 <a href="{% url 'mis_productos' %}" class="btn btn-primary px-4 py-2">Mis Productos</a>
-                <a href="{% url 'subir_producto' %}" class="btn btn-secondary px-4 py-2">Nuevo</a>
+                <a href="{% url 'subir_producto' %}" class="btn btn-outline-success px-4 py-2">Nuevo</a>
             </div>
         </div>
     </main>

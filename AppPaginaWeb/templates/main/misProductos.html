@@ -8,9 +8,6 @@ Pantalla de Inicio
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/styles_vista_producto.css' %}">
 <meta name="csrf-token" content="{{ csrf_token }}">
-<a class="btn btn-primary rounded-circle volver-btn" title="Volver" href="{% url 'main_negocio' %}">
-    <i class="bi bi-x-lg"></i>
-</a> 
 <h2 class="title">Mis Productos</h2>
 
 <section class="product-grid" id="product-grid">

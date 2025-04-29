@@ -20,6 +20,8 @@ urlpatterns = [
     path('borrar-imagen/', views.delete_from_s3, name='delete_from_s3'),
     path('informacion_producto/', views.info_producto, name='informacion_producto'),
     path('editar_usuario/', views.editar_usuario, name='editar_usuario'),
+    path('informacion_producto/<int:producto_id>/', views.obtener_producto_por_id, name='obtener_producto_id'),
+    path('informacion_negocio/<int:id>/', views.obtener_negocio_por_id, name='obtener_negocio_id_info'),
 
     # Usuarios
     path('usuarios/', listar_usuarios, name='listar_usuarios'),

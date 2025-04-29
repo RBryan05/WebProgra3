@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p>${producto.descripcion}</p>
                 <p class="price">$${producto.precio}</p>
                 <p>Publicado el ${formatDate(producto.creado_en)}</p>
-                <button class="favorite-btn" onclick="location.href='${infoProdcutos}';">Más información</button>
+                <button onclick="localStorage.setItem('selectedProductId', ${producto.id}); location.href='${infoProdcutos}';">Más Información</button>
             `;
             productGrid.appendChild(productCard);
         });
