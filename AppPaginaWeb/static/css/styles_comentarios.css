@@ -1,0 +1,145 @@
+/* Sección de comentarios - diseño mejorado */
+.comentarios-section {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Ligero aumento de opacidad */
+    backdrop-filter: blur(5px);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: 80vh;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+}
+
+.comentarios-section h2 {
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 1.8rem;
+    margin-bottom: 1.8rem;
+    position: relative;
+}
+
+.comentarios-section h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--color-secondary);
+    margin: 0.8rem auto 0;
+    opacity: 0.7;
+}
+
+/* Contenedor de lista mejorado */
+.comentarios-lista-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+    border-radius: calc(var(--border-radius) - 2px);
+    padding: 1.5rem 1.5rem 0.5rem;
+    min-height: 200px;
+    max-height: 60vh;
+    background-color: rgba(255, 255, 255, 0.6); /* Fondo semi-opaco */
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Borde muy sutil */
+}
+
+/* Lista de comentarios */
+.comentarios-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 50%;
+    max-width: 600px;
+    margin-left: auto;
+    padding-bottom: 1.5rem;
+}
+
+/* Items de comentario mejorados */
+.comentario-item {
+    background-color: rgba(255, 255, 255, 0.8); /* Casi opaco */
+    padding: 1.2rem;
+    border-radius: calc(var(--border-radius) - 2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    border-left: 3px solid var(--color-secondary); /* Acento de color */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comentario-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Formulario mejorado */
+.comentario-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    position: sticky;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0); /* Fondo casi sólido */
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.comentario-formulario textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 1rem;
+    border-radius: calc(var(--border-radius) - 2px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    resize: vertical;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(5px);
+}
+
+.comentario-formulario textarea:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    background-color: white;
+}
+
+.btn-comentario {
+    align-self: flex-start;
+    padding: 0.6rem 1.5rem;
+    background-color: var(--color-secondary);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-comentario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .comentarios-section {
+        padding: 1.5rem;
+        margin-top: 2rem;
+        max-height: none;
+    }
+    
+    .comentarios-lista {
+        width: 100%;
+        padding-bottom: 1rem;
+    }
+    
+    .comentarios-lista-container {
+        padding: 1rem;
+        max-height: 50vh;
+    }
+    
+    .comentario-formulario textarea {
+        min-height: 90px;
+    }
+}

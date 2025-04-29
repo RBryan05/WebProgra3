@@ -10,6 +10,11 @@ body {
     font-weight: 700;
 }
 
+.card{
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+}
+
 .card .form-label {
     font-weight: 600;
     color: #2c3e50;

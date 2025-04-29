@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         productGrid.innerHTML = '';
 
         if (productos.length === 0) {
-            productGrid.innerHTML = '<p class="no-results">No se encontraron productos que coincidan con tu búsqueda.</p>';
+            productGrid.innerHTML = '<p class="no-results">No se encontraron productos.</p>';
             return;
         }
 

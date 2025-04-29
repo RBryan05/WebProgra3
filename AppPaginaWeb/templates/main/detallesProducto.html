@@ -7,6 +7,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/styles_infoProducto.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles_comentarios.css' %}">
 <main class="producto-container">
   <!-- Encabezado con foto e información -->
   <h2 class="title">Información del Producto</h2>
@@ -44,14 +45,27 @@
   <!-- Sección de comentarios -->
   <section class="comentarios-section">
     <h2>Comentarios</h2>
-    <div class="comentarios-lista" id="comentariosLista">
-      <!-- Comentarios se cargarán aquí -->
-      <div class="comentario-item">
-        <p class="autor">Usuario Ejemplo</p>
-        <p>Este es un comentario de ejemplo sobre el producto.</p>
+    <div class="comentarios-lista-container">
+      <div class="comentarios-lista" id="comentariosLista">
+        <!-- Comentarios se cargarán aquí -->
+        <div class="comentario-item">
+          <p class="autor">Usuario Ejemplo</p>
+          <p>Este es un comentario de ejemplo sobre el producto.</p>
+        </div>
+        <div class="comentario-item">
+          <p class="autor">Usuario Ejemplo</p>
+          <p>Este es un comentario de ejemplo sobre el producto.</p>
+        </div>
+        <div class="comentario-item">
+          <p class="autor">Usuario Ejemplo</p>
+          <p>Este es un comentario de ejemplo sobre el producto.</p>
+        </div>
+        <div class="comentario-item">
+          <p class="autor">Usuario Ejemplo</p>
+          <p>Este es un comentario de ejemplo sobre el producto.</p>
+        </div>
       </div>
     </div>
-
 
     <form class="comentario-formulario" id="formComentario">
       <label for="nuevoComentario" class="visually-hidden">Escribe tu comentario</label>
