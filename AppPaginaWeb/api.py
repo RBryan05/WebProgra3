@@ -1,7 +1,7 @@
 import requests
 
 # URLs base de la API
-BASE_URL = "https://apiproyectoprogra3.onrender.com/"
+BASE_URL = "https://apiproyectoprogra3.onrender.com/api/"
 ENDPOINTS = {
     "usuarios": "usuarios/",
     "negocios": "negocios/",
