@@ -1,0 +1,50 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Agregar Categoría{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style_agregar_categoria.css' %}">
+<h2 class="title">Agregar Nueva Categoría</h2>
+
+<div class="form-container">
+    <div class="category-card">
+        <form id="categoriaForm">
+            {% csrf_token %}
+            
+            <!-- Campo para el nombre de la categoría -->
+            <div class="form-group">
+                <label for="nombre">Nombre de la Categoría:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre de la categoria..." required>
+            </div>
+
+            <!-- Campo para subir la imagen -->
+            <div class="form-group">
+                <label for="imagen">Imagen de la categoria:</label>
+                <div class="input-group">
+                    <input type="file" class="form-control" id="foto" name="foto" 
+                           accept="image/jpeg,image/png" required>
+                    <button class="btn btn-outline-success upload-btn" type="button">
+                        <i class="bi bi-folder2-open"></i> Explorar
+                    </button>
+                </div>
+                <div class="form-text">Formatos: JPG, PNG. Máx. 5MB</div>
+            </div>
+
+            <!-- Botón de submit -->
+            <button type="submit" class="submit-btn">
+                <i class="bi bi-save"></i> Guardar Categoría
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- URLs para las peticiones AJAX -->
+<div id="urls" 
+    data-subir-imagen-url="{% url 'subir_imagen_s3' %}" 
+    data-registrar-categoria="{% url 'registrar_categoria' %}"
+    data-url-agregar-producto="{% url 'subir_producto' %}">
+</div>
+
+<script src="{% static 'js/agregar_categoria.js' %}"></script>
+{% endblock %}

@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (datosUsuario) {
         if (datosUsuario.tipo_usuario === "negocio") {
             elements.editarPerfilBtn.href = editarNegocioUrl;
-        } else if (datosUsuario.tipo_usuario === "normal") {
+        } else if (datosUsuario.tipo_usuario === "normal" || datosUsuario.tipo_usuario === "usuario") {
             elements.editarPerfilBtn.href = editarUsuarioUrl;
         } else {
             console.error("Tipo de usuario no reconocido.");

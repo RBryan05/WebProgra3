@@ -1,4 +1,4 @@
-/* Estilos generales */
+/* Estilos base */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -12,33 +12,33 @@ body {
     font-size: 2em;
     color: #2c3e50;
     font-weight: 700;
-    margin-bottom: 20px; /* Ajustamos el margen inferior para que no se sobreponga */
+    margin-bottom: 20px;
 }
 
-/* Contenedor del formulario, centrado en la pantalla */
+/* Contenedor del formulario */
 .form-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;  /* Hacer que el contenedor ocupe la altura disponible */
+    height: 100%;
     padding: 20px;
-    min-height: 500px; /* Establecer una altura mínima para pantallas pequeñas */
-    margin-top: 20px; /* Evitar que se solape con el navbar en pantallas pequeñas */
+    min-height: 500px;
+    margin-top: 20px;
 }
 
-/* Estilos de la tarjeta */
-.product-card {
+/* Tarjeta del formulario */
+.category-card {
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px;  /* Ancho máximo de la tarjeta */
+    max-width: 600px;
     text-align: center;
 }
 
-/* Estilos para cada campo del formulario */
+/* Grupos de formulario */
 .form-group {
     margin-bottom: 15px;
     text-align: left;
@@ -52,9 +52,7 @@ body {
     display: block;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
+.form-group input[type="text"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -64,11 +62,46 @@ body {
     margin-top: 5px;
 }
 
-.form-group textarea {
-    resize: vertical;  /* Permitir redimensionar solo verticalmente */
+/* Grupo de subida de archivos - Réplica exacta */
+.form-group .input-group {
+    display: flex;
+    width: 100%;
+    margin-top: 5px;
 }
 
-/* Botón de envío */
+.form-group .input-group .form-control {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px 0 0 8px;
+    font-size: 1em;
+    height: 46px;
+    border-right: none;
+}
+
+.form-group .input-group .upload-btn {
+    padding: 0 15px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.form-group .input-group #btn-subir-imagen {
+    border: 1px solid #28a745;
+    border-radius: 0 8px 8px 0;
+    background-color: #28a745;
+    color: white;
+    padding: 0 15px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Botón de submit */
 .submit-btn {
     padding: 10px 20px;
     font-size: 1.2em;
@@ -79,23 +112,23 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
-}
-
-.btn-categoria {
-    width: 100%;
-}
-
-.C {
-    width: 25%;
+    margin-top: 10px;
 }
 
 .submit-btn:hover {
     background-color: #2980b9;
 }
 
-/* Diseño responsive */
+/* Texto de ayuda */
+.form-text {
+    font-size: 0.8em;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .product-card {
+    .category-card {
         padding: 20px;
     }
 
@@ -107,39 +140,34 @@ body {
         font-size: 1em;
     }
 
-    /* Para que el formulario no quede tan alto en pantallas pequeñas */
     .form-container {
         height: auto;
         margin-top: 20px;
     }
 }
 
-.upload-btn {
+/* Estilos para el input file */
+.input-group-wrapper {
     position: relative;
-    overflow: hidden;
+    flex: 1;
+    display: flex;
 }
-.upload-btn input[type="file"] {
+
+.input-group-wrapper input[type="file"] {
     position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
     opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
     cursor: pointer;
 }
 
-/* Ocultar el texto predeterminado y el botón nativo */
+/* Ocultar controles nativos del input file */
 input[type="file"]::-webkit-file-upload-button {
     visibility: hidden;
     margin-left: -175px;
 }
 input[type="file"]::file-selector-button {
     visibility: hidden;
-}
-
-/* Botones - altura fija idéntica al input */
-.upload-btn, 
-#btn-subir-aws {
-    margin-top: 5px;
-    height: 46px; /* Misma altura que el input */
 }

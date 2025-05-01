@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         renderProducts(filteredProducts, allBusinesses);
     }
 
-    // Función para renderizar productos
+    // Función para renderizar productos (versión con orden aleatorio)
     function renderProducts(products, businesses) {
         const productGrid = document.getElementById('product-grid');
         if (!productGrid) return;
@@ -54,8 +54,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // Limpiar contenedor
         productGrid.innerHTML = '';
 
-        // Filtrar solo productos activos
-        const activeProducts = products.filter(producto => producto.estado === "activo");
+        // Filtrar solo productos activos y mezclarlos aleatoriamente
+        const activeProducts = products
+            .filter(producto => producto.estado === "activo")
+            // Orden aleatorio usando Math.random()
+            .sort(() => Math.random() - 0.5);
 
         // Mostrar mensaje si no hay resultados
         if (activeProducts.length === 0) {
@@ -71,14 +74,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const productCard = document.createElement('div');
             productCard.classList.add('product-card');
             productCard.innerHTML = `
-                <img src="${producto.imagen_url || config.defaultImage}" alt="${producto.nombre}">
-                <h3>${producto.nombre}</h3>
-                <p>${producto.descripcion}</p>
-                <p class="price">$${producto.precio}</p>
-                <p><strong>Publicado por:</strong> ${negocioName}</p>
-                <p>Publicado el ${formatDate(producto.creado_en)}</p>
-                <button onclick="localStorage.setItem('selectedProductId', ${producto.id}); location.href='${infoProdcutos}';">Más Información</button>
-            `;
+            <img src="${producto.imagen_url || config.defaultImage}" alt="${producto.nombre}">
+            <h3>${producto.nombre}</h3>
+            <p>${producto.descripcion}</p>
+            <p class="price">$${producto.precio}</p>
+            <p><strong>Publicado por:</strong> ${negocioName}</p>
+            <p>Publicado el ${formatDate(producto.creado_en)}</p>
+            <button onclick="localStorage.setItem('selectedProductId', ${producto.id}); location.href='${infoProdcutos}';">Más Información</button>
+        `;
 
             productGrid.appendChild(productCard);
         });

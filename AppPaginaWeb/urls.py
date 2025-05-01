@@ -12,6 +12,7 @@ urlpatterns = [
     path('editar_producto/', views.editar_producto, name='editar_producto'),
     path('mi_perfil/', views.mi_perfil, name='mi_perfil'),
     path('negocios/', views.negocios, name='negocios'),
+    path('productos/favoritos/negocios/', views.negocios, name='negocios'),
     path('negocios/infonegocio/', views.info_negocio, name='info_negocio'),
     path('categoriaproductos/', views.productos_categoria, name='categoriaproductos'),
     path('editar_perfil/', views.editar_negocio, name='editar_negocio'),
@@ -22,6 +23,10 @@ urlpatterns = [
     path('editar_usuario/', views.editar_usuario, name='editar_usuario'),
     path('informacion_producto/<int:producto_id>/', views.obtener_producto_por_id, name='obtener_producto_id'),
     path('informacion_negocio/<int:id>/', views.obtener_negocio_por_id, name='obtener_negocio_id_info'),
+    path('obtener_usuario_por_id/<int:id>/', views.obtener_usuario_por_id, name='obtener_usuario_id'),
+    path('productos/favoritos/obtener_usuario_por_id/<int:id>/', views.obtener_usuario_por_id, name='obtener_usuario_id'),
+    path('productos/favoritos/', views.productos_favoritos, name='productos_favoritos'),
+    path('agregar_categoria/', views.agregar_categoria, name='agregar_categoria'),
 
     # Usuarios
     path('usuarios/', listar_usuarios, name='listar_usuarios'),
@@ -52,6 +57,7 @@ urlpatterns = [
     # Productos
     path('productos/listadoproductos/', listar_productos, name='listar_productos'),
     path('mis_productos/listadoproductos/', listar_productos, name='listar_productos'),
+    path('listadoproductos/', listar_productos, name='listar_productos'),
     path('productos/crear/', registrar_producto, name='registrar_producto'),
     path('editar_producto/productos/<int:producto_id>/', actualizar_producto, name='actualizar_producto'),
     path('mis_productos/productos/<int:producto_id>/', actualizar_producto, name='actualizar_producto_misproductos'),

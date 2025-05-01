@@ -61,17 +61,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     id: data.id,
                     nombre_usuario: data.nombre_usuario,
                     nombre: data.nombre,
-                    tipo_usuario: accountType
+                    tipo_usuario: data.tipo_usuario
                 }));
                 
                 localStorage.setItem("usuarioLogeado", JSON.stringify({
                     nombre_usuario: data.nombre_usuario,
                     id: data.id,
-                    tipo_usuario: accountType
+                    tipo_usuario: data.tipo_usuario
                 }));
 
                 // Redirección - IMPORTANTE: Verifica las URLs
-                console.log("Redirigiendo a:", accountType === 'negocio' ? redirectNegocio : redirectUsuario);
                 window.location.href = accountType === 'negocio' ? redirectNegocio : redirectUsuario;
                 
             } else {

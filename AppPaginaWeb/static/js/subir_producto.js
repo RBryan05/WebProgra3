@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const urls = {
         subirImagenUrl: urlsDiv.dataset.subirImagenUrl,
         registrarProducto: urlsDiv.dataset.registrarProducto,
-        obtenerCategorias: urlsDiv.dataset.obtenerCategorias
+        obtenerCategorias: urlsDiv.dataset.obtenerCategorias,
+        urlMainNegocio: urlsDiv.dataset.urlIndex
     };
 
     // Obtener elementos del DOM
@@ -209,9 +210,19 @@ document.addEventListener('DOMContentLoaded', function () {
     if (form) {
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-
+    
+            // Mostrar loading
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <span class="spinner-border spinner-border-sm" role="status"></span> Procesando...
+            `;
+    
             // Validar que la imagen se haya subido si hay un archivo seleccionado
             if (fotoInput.files?.length && !imagenSubida) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
                 Swal.fire({
                     icon: 'warning',
                     title: 'Imagen no subida',
@@ -221,9 +232,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 return;
             }
-
+    
             // Validar que haya una URL de imagen
             if (!urlImagen) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
                 Swal.fire({
                     icon: 'error',
                     title: 'Imagen requerida',
@@ -233,10 +246,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 return;
             }
-
+    
             // Validar categoría seleccionada
             const categoriaId = document.getElementById('categoria').value;
             if (!categoriaId) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
                 Swal.fire({
                     icon: 'error',
                     title: 'Categoría requerida',
@@ -246,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 return;
             }
-
+    
             // Recoger los datos del formulario
             const producto = {
                 nombre: document.getElementById('nombre').value,
@@ -257,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 categoria_id: categoriaId,
                 negocio_id: id_usuario
             };
-
+    
             // Enviar los datos al servidor
             fetch(urls.registrarProducto, {
                 method: "POST",
@@ -272,24 +287,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.error) {
                         throw new Error(data.error);
                     }
-
+    
                     // Limpiar la imagen anterior ya que ahora está asociada a un producto
                     imagenAnteriorSubida = null;
-
-                    Swal.fire({
+    
+                    return Swal.fire({
                         icon: 'success',
                         title: '¡Producto creado!',
                         text: 'El producto se ha registrado correctamente',
                         timer: 2500,
                         showConfirmButton: false
                     }).then(() => {
-                        form.reset();
-                        imagenSubida = false;
-                        archivoActual = null;
-                        urlImagen = "";
-                        actualizarEstadoBoton();
-                        cargarCategorias(); // Recargar categorías por si hubo cambios
+                        window.location.href = urls.urlMainNegocio;
                     });
+                })
+                .then(() => {
+                    form.reset();
+                    imagenSubida = false;
+                    archivoActual = null;
+                    urlImagen = "";
+                    actualizarEstadoBoton();
+                    cargarCategorias(); // Recargar categorías por si hubo cambios
+                    
+                    // Redirigir después de que se cierre la alerta
+                    window.location.href = urls.urlMainNegocio;
                 })
                 .catch(error => {
                     Swal.fire({
@@ -299,6 +320,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         timer: 2500,
                         showConfirmButton: false
                     });
+                })
+                .finally(() => {
+                    // Restaurar el botón
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
                 });
         });
     }

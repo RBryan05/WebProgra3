@@ -39,11 +39,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 {% if activar_buscador %}
                 <form class="d-flex" id="search-form">
-                    <input class="form-control me-2 buscador" 
-                           type="search" 
-                           placeholder="Buscar en Todos los Productos..." 
-                           aria-label="Search"
-                           id="search-input">
+                    <input class="form-control me-2 buscador" type="search"
+                        placeholder="Buscar en Todos los Productos..." aria-label="Search" id="search-input">
                 </form>
                 {% endif %}
                 <ul class="navbar-nav ms-auto">
@@ -51,21 +48,21 @@
                             href="{% url 'negocios' %}">Negocios</a></li>
                     <li class="nav-item {% if pagina_actual == 'productos' %}fw-bold{% endif %}"><a
                             class="nav-link fs-5" href="{% url 'productos' %}">Productos</a></li>
+                    <li class="nav-item {% if pagina_actual == 'misFavoritos' %}fw-bold{% endif %}"><a class="nav-link fs-5" href="{% url 'productos_favoritos' %}">Mis Favoritos</a></li>
                     <li class="nav-item"><a class="nav-link fs-5" href="#">Acerca De</a></li>
-                    <li class="nav-item"><a class="nav-link fs-5" href="#">Contáctanos</a></li>
                     <!-- Aquí se cambia el comportamiento dependiendo de si hay usuario en el localStorage -->
                     <li class="nav-item" id="user-info-container">
                         <!-- Botón de login con clases adicionales -->
-                        <a class="btn btn-primary fs-5 btn-iniciar-secion w-100-mobile" 
-                           href="{% url 'login' %}" 
-                           id="login-btn">Iniciar Sesión</a>
+                        <a class="btn btn-primary fs-5 btn-iniciar-secion w-100-mobile" href="{% url 'login' %}"
+                            id="login-btn">Iniciar Sesión</a>
 
                         <!-- Este dropdown se mostrará si el usuario está en localStorage -->
                         <div class="dropdown" id="user-dropdown" style="display: none;">
-                            <span class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <span id="user-name" class="me-2">Bienvenido</span>  <!-- Texto primero -->
-                                <img src="" id="user-profile-img" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">  <!-- Imagen después -->
+                            <span class="nav-link dropdown-toggle d-flex align-items-center" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="user-name" class="me-2">Bienvenido</span> <!-- Texto primero -->
+                                <img src="" id="user-profile-img" class="rounded-circle"
+                                    style="width: 32px; height: 32px; object-fit: cover;"> <!-- Imagen después -->
                             </span>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" href="{% url 'mi_perfil' %}">Ver Perfil</a></li>

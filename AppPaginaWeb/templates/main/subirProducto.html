@@ -61,6 +61,11 @@ Subir Producto
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="categoria">¿No está la categoria necesaria?</label>
+                <a href="{% url 'agregar_categoria' %}" type="submit" class="btn-categoria btn btn-outline-primary">Agregar Categoria</a>
+            </div>
+
             <button type="submit" class="submit-btn">Subir Producto</button>
         </form>
     </div>
@@ -69,7 +74,8 @@ Subir Producto
 <div id="urls" 
      data-subir-imagen-url="{% url 'subir_imagen_s3' %}"
      data-registrar-producto="{% url 'registrar_producto' %}"
-     data-obtener-categorias="categorias/">
+     data-obtener-categorias="categorias/"
+     data-url-index="{% url 'main_negocio' %}">
 </div>
 <!-- Incluimos el archivo JavaScript externo -->
 <script src="{% static 'js/subir_producto.js' %}"></script>

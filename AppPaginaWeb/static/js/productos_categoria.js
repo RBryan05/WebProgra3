@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     titulo.innerHTML = "Productos de la Categoria " + (localStorage.getItem('nombreCategoria') || "Productos de la categoría");
 
     if (searchInput) {
-        searchInput.placeholder = "Buscar un Producto de la Categoria " + (localStorage.getItem('nombreCategoria') || "Productos de la categoría") + "...";
+        searchInput.placeholder = "Buscar un Producto de la Categoria " + localStorage.getItem('nombreCategoria') || "Productos de la categoría...";
     }
 
     // Variables globales

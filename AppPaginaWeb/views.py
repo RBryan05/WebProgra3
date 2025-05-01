@@ -72,6 +72,16 @@ def productos_categoria(request):
         'activar_buscador': True,     
     })
 
+def productos_favoritos(request):
+    return render(request, 'main/misFavoritos.html', {
+        'pagina_actual': 'misFavoritos',
+        'activar_buscador': True,     
+    })
+
+def agregar_categoria(request):
+    return render(request, 'main/agregarCategoria.html'
+    )
+
 # Obtener usuario por nombre de usuario (username)
 def obtener_usuario_por_username(request, username):
     usuarios = obtener_datos("usuarios")
@@ -81,6 +91,14 @@ def obtener_usuario_por_username(request, username):
         return JsonResponse(usuario, safe=False)
     else:
         return JsonResponse({"error": "Usuario no encontrado"}, status=404)
+
+def obtener_usuario_por_id(request, id):
+    usuarios = obtener_datos("usuarios")
+    usuario = next((n for n in usuarios if n["id"] == id), None)
+    if usuario:
+        return JsonResponse(usuario, safe=False)
+    else:
+        return JsonResponse({"error": "Usurio no encontrado"}, status=404)
 
 # Crear usuario
 @csrf_exempt

@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Mis Productos Favoritos{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_vista_producto.css' %}">
+<h2 class="title">Mis Productos Favoritos</h2>
+
+<section class="product-grid" id="product-grid">
+    <!-- Los productos favoritos se agregarán aquí dinámicamente -->
+</section>
+
+<!-- Solo pasamos la imagen por defecto como data attribute -->
+<div id="app-data" data-default-image="{% static 'img/default_product.webp' %}"></div>
+
+<!-- Incluimos el JavaScript externo -->
+<script src="{% static 'js/verFavoritos.js' %}"></script>
+
+<div id="urls" data-mi-perfil="{% url 'informacion_producto' %}"></div>
+
+{% endblock %}
