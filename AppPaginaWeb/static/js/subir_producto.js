@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const urls = {
         subirImagenUrl: urlsDiv.dataset.subirImagenUrl,
         registrarProducto: urlsDiv.dataset.registrarProducto,
-        obtenerCategorias: urlsDiv.dataset.obtenerCategorias,
         urlMainNegocio: urlsDiv.dataset.urlIndex
     };
 
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const originalHTML = selectCategoria.innerHTML;
         selectCategoria.innerHTML = '<option value="">Cargando categorías...</option>';
 
-        fetch(`${urls.obtenerCategorias}${id_usuario}/`)
+        fetch(`categorias/${id_usuario}/`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al cargar categorías');

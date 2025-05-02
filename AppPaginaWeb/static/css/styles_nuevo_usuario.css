@@ -1,14 +1,15 @@
 /* Estilos generales */
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px; /* Añadido para espacio alrededor */
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(180deg,  #3498db, rgba(41, 127, 185, 0.512));
+    background: linear-gradient(180deg, #3498db, rgba(41, 127, 185, 0.512));
+    min-height: 100vh;
+    position: relative;
+    box-sizing: border-box;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Cambiado a columna */
     align-items: center;
-    height: 100vh; /* Asegura que el body ocupe toda la altura de la pantalla */
-    position: relative;  /* Agregado para permitir el uso de z-index */
 }
 
 /* Aseguramos que las formas estén por debajo del contenido */
@@ -61,10 +62,8 @@ body {
 
 .register-container {
     width: 100%;
-    max-width: 440px;
-    padding: 20px;
-    z-index: 10; /* Asegura que el contenido esté por encima de la animación */
-    position: relative; /* Permite el uso de z-index */
+    padding: 0; /* Eliminado padding redundante */
+    z-index: 10;
 }
 
 .register-box {
@@ -195,28 +194,40 @@ button {
     }
 }
 
-.volver-btn {
-    position: absolute;   /* Asegura que el botón quede fijo en la esquina */
-    top: 20px;         /* Lo coloca a 20px desde el borde superior */
-    left: 20px;        /* Lo coloca a 20px desde el borde izquierdo */
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5em;
-    z-index: 1000;
-    border-radius: 50%;
-    background-color: #007bff;
-    color: white;
-    border: none; /* Sobrescribe el borde que aplica Bootstrap */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+/* Mejoras para elemento-arriba */
+.elemento-arriba {
+    width: 100%;
+    max-width: 440px; /* Mismo ancho que el formulario */
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 25px; /* Igual que register-box */
+    border: 1px solid #f5c6cb;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    background-color: rgba(248, 215, 218, 0.85);
 }
 
-/* Hover effects */
-.volver-btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.1);
+.main-container {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto; /* Centrado vertical cuando hay espacio */
+}
+
+/* Ajuste para el texto dentro de elemento-arriba */
+.elemento-arriba .input-group label {
+    color: #721c24;
+    font-size: 0.9em;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+/* Eliminar margen inferior del input-group dentro de elemento-arriba */
+.elemento-arriba .input-group {
+    margin-bottom: 0;
 }
