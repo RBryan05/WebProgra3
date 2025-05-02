@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
 
             localStorage.setItem("usuario", JSON.stringify({
-                id: data,
+                id: data.id,
                 nombre_usuario: data.nombre_usuario,
                 nombre: data.nombre,
                 direccion: data.direccion,

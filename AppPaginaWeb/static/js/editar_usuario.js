@@ -286,7 +286,7 @@ async function actualizarPerfil(event) {
         });
 
         localStorage.setItem("usuario", JSON.stringify({
-            id: data,
+            id: data.id,
             nombre_usuario: data.nombre_usuario,
             nombre: data.nombre,
             foto_perfil: data.foto_perfil,
