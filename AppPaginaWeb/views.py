@@ -6,6 +6,9 @@ from .api import obtener_datos, obtener_dato, crear_dato, actualizar_dato, elimi
 from django.core.files.storage import default_storage
 from datetime import datetime
 import os
+import boto3
+from botocore.exceptions import ClientError
+from django.conf import settings
 
 def main_negocio(request):
     return render(request, 'main/index.html')
@@ -342,38 +345,15 @@ def eliminar_comentario(request, comentario_id):
     if request.method == "DELETE":
         resultado = eliminar_dato("comentarios", comentario_id)
         return JsonResponse({"eliminado": resultado}, safe=False)
-
-# Listar respuestas
-def listar_respuestas(request):
-    respuestas = obtener_datos("respuestas")
-    return JsonResponse({"respuestas": respuestas}, safe=False)
-
-# Crear respuesta
-@csrf_exempt
-def registrar_respuesta(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        respuesta_creada = crear_dato("respuestas", data)
-        return JsonResponse(respuesta_creada, safe=False)
-
-# Actualizar respuesta
-@csrf_exempt
-def actualizar_respuesta(request, respuesta_id):
-    if request.method == "PUT":
-        data = json.loads(request.body)
-        respuesta_actualizada = actualizar_dato("respuestas", respuesta_id, data)
-        return JsonResponse(respuesta_actualizada, safe=False)
-
-# Eliminar respuesta
-@csrf_exempt
-def eliminar_respuesta(request, respuesta_id):
-    if request.method == "DELETE":
-        resultado = eliminar_dato("respuestas", respuesta_id)
-        return JsonResponse({"eliminado": resultado}, safe=False)
-
-import boto3
-from botocore.exceptions import ClientError
-from django.conf import settings
+    
+def obtener_comentarios_por_producto_id(request, producto_id):
+    comentarios = obtener_datos("comentarios")
+    comentarios_producto = [n for n in comentarios if n["producto"] == producto_id]
+    
+    if comentarios_producto:
+        return JsonResponse(comentarios_producto, safe=False)
+    else:
+        return JsonResponse({"error": "No se encontraron comentarios para este producto"}, status=404)
 
 @csrf_exempt
 def upload_to_s3(request):

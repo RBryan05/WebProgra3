@@ -43,44 +43,30 @@
   </div>
 
   <!-- Sección de comentarios -->
+  <!-- Se mantiene igual -->
   <section class="comentarios-section">
     <h2>Comentarios</h2>
-    <div class="comentarios-lista-container">
+    <div class="comentarios-lista-container" id="comentariosListaContainer">
       <div class="comentarios-lista" id="comentariosLista">
         <!-- Comentarios se cargarán aquí -->
-        <div class="comentario-item">
-          <p class="autor">Usuario Ejemplo</p>
-          <p>Este es un comentario de ejemplo sobre el producto.</p>
-        </div>
-        <div class="comentario-item">
-          <p class="autor">Usuario Ejemplo</p>
-          <p>Este es un comentario de ejemplo sobre el producto.</p>
-        </div>
-        <div class="comentario-item">
-          <p class="autor">Usuario Ejemplo</p>
-          <p>Este es un comentario de ejemplo sobre el producto.</p>
-        </div>
-        <div class="comentario-item">
-          <p class="autor">Usuario Ejemplo</p>
-          <p>Este es un comentario de ejemplo sobre el producto.</p>
-        </div>
       </div>
     </div>
-
     <form class="comentario-formulario" id="formComentario">
       <label for="nuevoComentario" class="visually-hidden">Escribe tu comentario</label>
-      <textarea id="nuevoComentario" placeholder="Escribe tu comentario sobre este producto..." required></textarea>
+      <textarea id="nuevoComentario" placeholder="Escribe tu comentario público sobre este producto..."
+        required></textarea>
       <button type="submit" class="btn btn-comentario btn-outline-primary">Enviar Comentario</button>
     </form>
   </section>
 </main>
 
-
 <!-- Datos estáticos para JS -->
-<div id="static-data" data-default-profile="{% static 'img/default_product.webp' %}" aria-hidden="true">
+<div id="static-data" data-default-profile="{% static 'img/default_product.webp' %}" aria-hidden="true"
+  data-imagen-perfil="{% static 'img/default_profile.avif' %}">
 </div>
 
 <script src="{% static 'js/detalleProducto.js' %}"></script>
 <script src="{% static 'js/agregarFav.js' %}"></script>
+<script src="{% static 'js/comentarios.js' %}"></script>
 
 {% endblock %}

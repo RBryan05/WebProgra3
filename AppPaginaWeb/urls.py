@@ -27,6 +27,8 @@ urlpatterns = [
     path('productos/favoritos/obtener_usuario_por_id/<int:id>/', views.obtener_usuario_por_id, name='obtener_usuario_id'),
     path('productos/favoritos/', views.productos_favoritos, name='productos_favoritos'),
     path('agregar_categoria/', views.agregar_categoria, name='agregar_categoria'),
+    path('obtener_comentarios_producto/<int:producto_id>/', views.obtener_comentarios_por_producto_id, name='obtener_comentarios_producto'),
+    path('obtener_negocio_por_id/<int:id>/', views.obtener_negocio_por_id, name='obtener_negocio_en_id'),
 
     # Usuarios
     path('usuarios/', listar_usuarios, name='listar_usuarios'),
@@ -74,10 +76,4 @@ urlpatterns = [
     path('comentarios/crear/', registrar_comentario, name='registrar_comentario'),
     path('comentarios/actualizar/<int:comentario_id>/', actualizar_comentario, name='actualizar_comentario'),
     path('comentarios/eliminar/<int:comentario_id>/', eliminar_comentario, name='eliminar_comentario'),
-
-    # Respuestas
-    path('respuestas/', listar_respuestas, name='listar_respuestas'),
-    path('respuestas/crear/', registrar_respuesta, name='registrar_respuesta'),
-    path('respuestas/actualizar/<int:respuesta_id>/', actualizar_respuesta, name='actualizar_respuesta'),
-    path('respuestas/eliminar/<int:respuesta_id>/', eliminar_respuesta, name='eliminar_respuesta'),
 ]
