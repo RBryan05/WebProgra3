@@ -18,7 +18,7 @@ Editar Producto
             {% csrf_token %}
             <div class="form-group">
                 <label for="nombre">Nombre del Producto:</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" maxlength="50" id="nombre" name="nombre" required>
             </div>
 
             <!-- Nuevo campo para el precio -->
@@ -29,7 +29,7 @@ Editar Producto
 
             <div class="form-group">
                 <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+                <textarea id="descripcion" maxlength="300" name="descripcion" rows="4" required></textarea>
             </div>
 
             <div class="form-group">

@@ -24,6 +24,13 @@
       <article class="info-section">
         <h1 class="producto-title" id="nombreProducto">Nombre del Producto</h1>
         <p class="precio-producto" id="precioProducto">$00.00</p>
+
+        <div class="calificacion-producto">
+          <span class="calificacion-promedio" id="promedioCalificacion">0.0</span>
+          <div class="estrellas-promedio" id="estrellasPromedio"></div>
+          <span class="cantidad-calificaciones" id="cantidadCalificaciones">(0 reseñas)</span>
+        </div>
+
         <p class="descripcion-producto" id="descripcionProducto">Descripción del producto...</p>
         <a href="#" id="agregarAFav" class="btn btn-outline-primary">Agregar a Favoritos</a>
       </article>
@@ -43,7 +50,6 @@
   </div>
 
   <!-- Sección de comentarios -->
-  <!-- Se mantiene igual -->
   <section class="comentarios-section">
     <h2>Comentarios</h2>
     <div class="comentarios-lista-container" id="comentariosListaContainer">
@@ -51,10 +57,22 @@
         <!-- Comentarios se cargarán aquí -->
       </div>
     </div>
+    <!-- En tu template HTML, modifica la sección del formulario de comentarios -->
     <form class="comentario-formulario" id="formComentario">
       <label for="nuevoComentario" class="visually-hidden">Escribe tu comentario</label>
       <textarea id="nuevoComentario" placeholder="Escribe tu comentario público sobre este producto..."
         required></textarea>
+
+      <div class="calificacion-input">
+        <label>Calificación:</label>
+        <div class="estrellas-seleccion">
+          {% for i in "12345" %}
+          <i class="bi bi-star estrella-seleccionable" data-valor="{{ i }}"></i>
+          {% endfor %}
+        </div>
+        <input type="hidden" id="calificacionInput" name="calificacion" value="5" required>
+      </div>
+
       <button type="submit" class="btn btn-comentario btn-outline-primary">Enviar Comentario</button>
     </form>
   </section>

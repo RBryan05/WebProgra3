@@ -1,3 +1,63 @@
+// Función para configurar la selección de estrellas
+function configurarSeleccionEstrellas() {
+    const estrellas = document.querySelectorAll('.estrella-seleccionable');
+    const inputCalificacion = document.getElementById('calificacionInput');
+    const valorDisplay = document.createElement('span'); // Creamos un elemento para mostrar el valor
+    
+    // Añadimos el display del valor junto a las estrellas
+    valorDisplay.className = 'valor-calificacion';
+    valorDisplay.textContent = '5/5'; // Valor por defecto
+    document.querySelector('.estrellas-seleccion').appendChild(valorDisplay);
+    
+    estrellas.forEach((estrella, index) => {
+        estrella.addEventListener('click', () => {
+            const valorSeleccionado = index + 1;
+            inputCalificacion.value = valorSeleccionado; // Guardamos el valor en el input oculto
+            valorDisplay.textContent = valorSeleccionado + '/5'; // Actualizamos el display
+            
+            estrellas.forEach((star, i) => {
+                if (i <= index) {
+                    star.classList.remove('bi-star');
+                    star.classList.add('bi-star-fill');
+                    star.classList.add('seleccionada');
+                } else {
+                    star.classList.remove('bi-star-fill');
+                    star.classList.remove('seleccionada');
+                    star.classList.add('bi-star');
+                }
+            });
+        });
+        
+        // Efectos hover
+        estrella.addEventListener('mouseover', () => {
+            const hoverIndex = index + 1;
+            valorDisplay.textContent = hoverIndex  + '/5'; // Mostramos valor temporal durante hover
+            estrellas.forEach((star, i) => {
+                if (i < hoverIndex) {
+                    star.classList.add('hover');
+                } else {
+                    star.classList.remove('hover');
+                }
+            });
+        });
+        
+        estrella.addEventListener('mouseout', () => {
+            valorDisplay.textContent = inputCalificacion.value + '/5'; // Volvemos al valor seleccionado
+            estrellas.forEach(star => {
+                star.classList.remove('hover');
+            });
+        });
+    });
+    
+    // Establecer calificación por defecto (5 estrellas)
+    inputCalificacion.value = 5;
+    estrellas.forEach(star => {
+        star.classList.remove('bi-star');
+        star.classList.add('bi-star-fill');
+        star.classList.add('seleccionada');
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const productoId = localStorage.getItem('selectedProductId');
     const comentariosLista = document.getElementById('comentariosLista');
@@ -16,6 +76,47 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    function actualizarPromedioCalificaciones(comentarios) {
+        const comentariosCalificados = comentarios.filter(c => !c.esRespuesta && c.calificacion);
+        
+        if (comentariosCalificados.length === 0) {
+            document.getElementById('promedioCalificacion').textContent = '0.0';
+            document.getElementById('cantidadCalificaciones').textContent = '(No hay reseñas de este producto)';
+            renderizarEstrellasPromedio(0);
+            return;
+        }
+        
+        const suma = comentariosCalificados.reduce((total, c) => total + c.calificacion, 0);
+        const promedio = suma / comentariosCalificados.length;
+        const promedioRedondeado = Math.round(promedio * 2) / 2;
+    
+        document.getElementById('promedioCalificacion').textContent = promedioRedondeado.toFixed(1);
+        document.getElementById('cantidadCalificaciones').textContent = `(${comentariosCalificados.length} reseñas)`;
+        renderizarEstrellasPromedio(promedioRedondeado);
+    }
+
+    function renderizarEstrellasPromedio(promedio) {
+        const contenedor = document.getElementById('estrellasPromedio');
+        contenedor.innerHTML = '';
+        
+        for (let i = 1; i <= 5; i++) {
+            const estrella = document.createElement('i');
+            
+            if (i <= promedio) {
+                estrella.className = 'bi bi-star-fill';
+            } else if (i - 0.5 <= promedio) {
+                estrella.className = 'bi bi-star-half';
+            } else {
+                estrella.className = 'bi bi-star';
+            }
+            
+            estrella.style.color = '#ffc107';
+            contenedor.appendChild(estrella);
+        }
+
+        contenedor.appendChild(document.createTextNode(' ')); // Espacio entre estrellas
+    }
+
     function cargarComentarios() {
         fetch(`/obtener_comentarios_producto/${productoId}/`)
             .then(response => {
@@ -25,21 +126,22 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(comentarios => {
                 comentariosLista.innerHTML = '';
-
+    
                 if (!Array.isArray(comentarios)) {
                     throw new Error('Formato de respuesta inválido');
                 }
-
+    
+                // Nueva línea para actualizar calificaciones
+                actualizarPromedioCalificaciones(comentarios);
+    
                 if (comentarios.length === 0) {
                     comentariosLista.innerHTML = '<p class="no-comments">No hay comentarios aún.</p>';
                     return;
                 }
-
-                // Separar comentarios y respuestas
+    
                 const comentariosPrincipales = comentarios.filter(c => !c.esRespuesta);
                 const respuestas = comentarios.filter(c => c.esRespuesta);
-
-                // Crear array de promesas para todos los comentarios
+    
                 const promesasComentarios = comentariosPrincipales.map(comentario => {
                     return crearItemComentario(comentario)
                         .then(item => {
@@ -47,25 +149,20 @@ document.addEventListener('DOMContentLoaded', () => {
                             return { item, comentario };
                         });
                 });
-
-                // Cuando todos los comentarios estén creados
+    
                 Promise.all(promesasComentarios)
                     .then(resultados => {
-                        // Dentro de la función cargarComentarios(), modifica la parte donde manejas las respuestas:
                         resultados.forEach(({ item, comentario }) => {
-                            // Filtrar respuestas para este comentario específico
-                            const respuestasDeEsteComentario = respuestas.filter(r =>
+                            const respuestasDeEsteComentario = respuestas.filter(r => 
                                 r.comentario_respuesta === comentario.id
                             );
-
-                            // Obtener elementos del DOM
+    
                             const respuestasContainer = item.querySelector('.respuestas-container');
                             const btnVerRespuestas = item.querySelector('.btn-ver-respuestas');
                             const btnOcultarRespuestas = item.querySelector('.btn-ocultar-respuestas');
                             const respuestasCount = item.querySelector('.respuestas-count');
                             const controlesRespuestas = item.querySelector('.controles-respuestas');
-
-                            // Mostrar botón si hay respuestas
+    
                             if (respuestasDeEsteComentario.length > 0 && respuestasContainer) {
                                 if (respuestasCount) {
                                     respuestasCount.textContent = respuestasDeEsteComentario.length;
@@ -73,39 +170,31 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (btnVerRespuestas) {
                                     btnVerRespuestas.style.display = 'inline-block';
                                 }
-
-                                // Agregar las primeras 3 respuestas
+    
                                 respuestasDeEsteComentario.slice(0, 3).forEach(respuesta => {
                                     crearItemRespuesta(respuesta, comentario)
                                         .then(respuestaItem => {
                                             respuestasContainer.appendChild(respuestaItem);
                                         });
                                 });
-
-                                // Si hay más de 3 respuestas, crear contenedor de controles adicionales
+    
                                 if (respuestasDeEsteComentario.length > 3) {
                                     const btnCargarMas = document.createElement('button');
                                     btnCargarMas.className = 'btn-cargar-mas-respuestas';
-
-                                    // Calcular respuestas restantes inicialmente
                                     let respuestasRestantes = respuestasDeEsteComentario.length - 3;
                                     btnCargarMas.textContent = `Ver ${respuestasRestantes} más ▼`;
-
-                                    // Crear contenedor para ambos botones
+    
                                     const controlesAdicionales = document.createElement('div');
                                     controlesAdicionales.className = 'controles-adicionales';
-                                    controlesAdicionales.style.display = 'none'; // Oculto inicialmente
-
-                                    // Agregar botones al contenedor
+                                    controlesAdicionales.style.display = 'none';
+    
                                     controlesAdicionales.appendChild(btnCargarMas);
                                     if (btnOcultarRespuestas) {
                                         controlesAdicionales.appendChild(btnOcultarRespuestas);
                                     }
-
-                                    // Insertar después del contenedor de respuestas
+    
                                     respuestasContainer.parentNode.insertBefore(controlesAdicionales, respuestasContainer.nextSibling);
-
-                                    // Agregar las respuestas restantes ocultas
+    
                                     respuestasDeEsteComentario.slice(3).forEach(respuesta => {
                                         crearItemRespuesta(respuesta, comentario)
                                             .then(respuestaItem => {
@@ -113,28 +202,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 respuestasContainer.appendChild(respuestaItem);
                                             });
                                     });
-
+    
                                     let respuestasMostradas = 3;
                                     btnCargarMas.addEventListener('click', () => {
                                         const respuestasOcultas = respuestasContainer.querySelectorAll('.respuesta-item[style="display: none;"]');
                                         const mostrar = Math.min(3, respuestasOcultas.length);
-
+    
                                         for (let i = 0; i < mostrar; i++) {
                                             respuestasOcultas[i].style.display = 'block';
                                         }
-
+    
                                         respuestasMostradas += mostrar;
                                         respuestasRestantes = respuestasDeEsteComentario.length - respuestasMostradas;
-
-                                        // Actualizar texto del botón
+    
                                         if (respuestasRestantes > 0) {
                                             btnCargarMas.textContent = `Ver ${respuestasRestantes} más`;
                                         } else {
                                             btnCargarMas.textContent = 'No hay más respuestas';
                                         }
                                     });
-
-                                    // Mostrar controles adicionales cuando se muestran las respuestas
+    
                                     if (btnVerRespuestas && controlesAdicionales) {
                                         btnVerRespuestas.addEventListener('click', () => {
                                             respuestasContainer.style.display = 'block';
@@ -142,8 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             controlesAdicionales.style.display = 'block';
                                         });
                                     }
-
-                                    // Ocultar respuestas y controles adicionales
+    
                                     if (btnOcultarRespuestas) {
                                         btnOcultarRespuestas.addEventListener('click', () => {
                                             respuestasContainer.style.display = 'none';
@@ -431,6 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const usuarioLogeado = JSON.parse(localStorage.getItem('usuario'));
         const textarea = document.getElementById('nuevoComentario');
         const comentarioTexto = textarea.value.trim();
+        const calificacion = parseInt(document.getElementById('calificacionInput').value);
 
         if (!comentarioTexto) {
             Swal.fire({
@@ -463,20 +550,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Determinar si es un comentario normal o una respuesta
         const esRespuesta = textarea.dataset.respuestaA !== undefined;
         const comentarioIdRespuesta = esRespuesta ? textarea.dataset.respuestaA : null;
 
-        // Preparar los datos para enviar
         const comentarioData = {
             producto: productoId,
             texto: comentarioTexto,
-            calificacion: 5, // Puedes ajustar esto si tienes un sistema de calificación
+            calificacion: calificacion,  // Usamos la calificación seleccionada
             esRespuesta: esRespuesta,
             comentario_respuesta: comentarioIdRespuesta
         };
 
-        // Determinar si el usuario es normal o negocio
         if (usuarioLogeado.tipo_usuario === 'normal') {
             comentarioData.usuario = usuarioLogeado.id;
             comentarioData.negocio = null;
@@ -485,7 +569,6 @@ document.addEventListener('DOMContentLoaded', () => {
             comentarioData.usuario = null;
         }
 
-        // Enviar el comentario al servidor
         fetch('/comentarios/crear/', {
             method: 'POST',
             headers: {
@@ -501,15 +584,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                // Limpiar el textarea
                 textarea.value = '';
                 textarea.removeAttribute('data-respuesta-a');
-
-                // Recargar los comentarios
                 cargarComentarios();
 
-                // Mostrar mensaje de éxito
-                if(esRespuesta) {
+                if (esRespuesta) {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Respuesta enviada!',
@@ -541,9 +620,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cerrar cualquier formulario de respuesta existente primero
         const formulariosExistente = document.querySelectorAll('.respuesta-form-container');
         formulariosExistente.forEach(form => form.remove());
-    
+
         const comentarioItem = document.querySelector(`.comentario-item[data-comentario-id="${comentarioId}"]`);
-    
+
         // Crear formulario de respuesta
         const formContainer = document.createElement('div');
         formContainer.className = 'respuesta-form-container';
@@ -559,15 +638,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </form>
         `;
-    
+
         // Insertar después del comentario
         comentarioItem.insertAdjacentElement('afterend', formContainer);
-    
+
         // Eventos
         formContainer.querySelector('.btn-cancelar-respuesta').addEventListener('click', () => {
             formContainer.remove();
         });
-    
+
         formContainer.querySelector('.form-respuesta').addEventListener('submit', function (e) {
             e.preventDefault();
             const texto = this.querySelector('textarea').value.trim();
@@ -576,7 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 formContainer.remove();
             }
         });
-    
+
         formContainer.querySelector('textarea').focus();
     }
 
@@ -647,5 +726,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return cookieValue;
     }
 
+    configurarSeleccionEstrellas();
     cargarComentarios();
 });

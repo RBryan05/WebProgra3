@@ -132,13 +132,6 @@ body {
     margin-bottom: 15px;
 }
 
-.descripcion-negocio {
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: 150px;
-    padding-right: 10px;
-}
-
 /* Responsive (apilamiento vertical) */
 @media (max-width: 1270px) {
     .producto-header {

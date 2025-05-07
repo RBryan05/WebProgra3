@@ -37,24 +37,25 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre completo</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        <input type="text" maxlength="50" class="form-control" id="nombre" name="nombre" required>
                     </div>
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono</label>
-                        <input type="tel" class="form-control" id="telefono" name="telefono">
+                        <input type="tel" maxlength="15" class="form-control" id="telefono" name="telefono">
                     </div>
                     <div class="mb-3">
                         <label for="descripcion" class="form-label">Descripción</label>
                         <textarea 
                             class="form-control" 
                             id="descripcion" 
-                            name="descripcion" 
+                            name="descripcion"
+                            maxlength="300" 
                             rows="4"
                             style="resize: vertical; min-height: 100px; width: 100%;"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" name="direccion">
+                        <input type="text" maxlength="100" class="form-control" id="direccion" name="direccion">
                     </div>
                     <div class="mb-3">
                         <label for="foto" class="form-label">Cambiar foto de perfil</label>
